@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-# In[102]:
+# In[25]:
 
 
 import os
@@ -12,38 +12,38 @@ import shutil
 
 # # Convert notebooks to html
 
-# In[103]:
+# In[26]:
 
 
 metadata_path = 'metadata.yaml'
 
 
-# In[104]:
+# In[27]:
 
 
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[105]:
+# In[28]:
 
 
 metadata
 
 
-# In[106]:
+# In[29]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
 
 
-# In[107]:
+# In[30]:
 
 
 max_base_filename_length = 50
 
 
-# In[ ]:
+# In[31]:
 
 
 project_names, project_paths = [], []
@@ -74,38 +74,38 @@ for project_notebook_path in metadata['Projects']:
     print('\n')
 
 
-# In[ ]:
+# In[32]:
 
 
 index_html_path = 'index.html'
 
 
-# In[ ]:
+# In[33]:
 
 
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[ ]:
+# In[34]:
 
 
 project_list_index_start = index_html_lines.index('<ul>\n') + 1
 project_list_index_end = index_html_lines.index('</ul>\n')
 
 
-# In[ ]:
+# In[35]:
 
 
 new_project_list =  [f'\t<li><a href="projects/{os.path.basename(html_path)}">{name}</a></li>\n' for name, html_path in zip(project_names, project_paths)]
 
 
-# In[ ]:
+# In[36]:
 
 
 new_project_list
 
 
-# In[ ]:
+# In[37]:
 
 
 index_html_lines = index_html_lines[:project_list_index_start] + new_project_list + index_html_lines[project_list_index_end:]
@@ -113,22 +113,28 @@ index_html_lines = index_html_lines[:project_list_index_start] + new_project_lis
 
 # # Copying Resume and Updating Links
 
-# In[ ]:
+# In[38]:
 
 
 assert shutil.copy(metadata['Resume'], f"projects/{os.path.basename(metadata['Resume'])}")
 
 
-# In[ ]:
+# In[39]:
 
 
 index_html_lines
 
 
-# In[ ]:
+# In[40]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['Resume', 'LinkedIn', 'GitHub']}
+tag_dict['Resume'] = f"projects/{os.path.basename(tag_dict['Resume'])}"
+
+
+# In[41]:
+
+
 for i, line in enumerate(index_html_lines):
     for tag in tag_dict:
         prefix = f"<a id='{tag}' href='"
@@ -144,7 +150,7 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[ ]:
+# In[42]:
 
 
 with open(index_html_path, 'w') as outfile:
