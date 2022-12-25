@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 import os
@@ -12,38 +12,44 @@ import shutil
 
 # # Convert notebooks to html
 
-# In[2]:
+# In[3]:
+
+
+os.chdir('/Users/ginoprasad/ginoprasad.github.io')
+
+
+# In[4]:
 
 
 metadata_path = 'metadata.yaml'
 
 
-# In[3]:
+# In[5]:
 
 
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[4]:
+# In[6]:
 
 
 metadata
 
 
-# In[5]:
+# In[7]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
 
 
-# In[6]:
+# In[8]:
 
 
 max_base_filename_length = 50
 
 
-# In[7]:
+# In[9]:
 
 
 project_names, project_paths = [], []
@@ -74,38 +80,38 @@ for project_notebook_path in metadata['Projects']:
     print('\n')
 
 
-# In[8]:
+# In[10]:
 
 
 index_html_path = 'index.html'
 
 
-# In[9]:
+# In[11]:
 
 
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[10]:
+# In[12]:
 
 
 project_list_index_start = index_html_lines.index('<ul>\n') + 1
 project_list_index_end = index_html_lines.index('</ul>\n')
 
 
-# In[11]:
+# In[13]:
 
 
 new_project_list =  [f'\t<li><a href="projects/{os.path.basename(html_path)}">{name}</a></li>\n' for name, html_path in zip(project_names, project_paths)]
 
 
-# In[12]:
+# In[14]:
 
 
 new_project_list
 
 
-# In[13]:
+# In[15]:
 
 
 index_html_lines = index_html_lines[:project_list_index_start] + new_project_list + index_html_lines[project_list_index_end:]
@@ -113,26 +119,26 @@ index_html_lines = index_html_lines[:project_list_index_start] + new_project_lis
 
 # # Copying Resume and Updating Links
 
-# In[14]:
+# In[16]:
 
 
 assert shutil.copy(metadata['Resume'], f"projects/{os.path.basename(metadata['Resume'])}")
 
 
-# In[15]:
+# In[17]:
 
 
 index_html_lines
 
 
-# In[16]:
+# In[18]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['Resume', 'LinkedIn', 'GitHub']}
 tag_dict['Resume'] = f"projects/{os.path.basename(tag_dict['Resume'])}"
 
 
-# In[17]:
+# In[19]:
 
 
 for i, line in enumerate(index_html_lines):
@@ -150,14 +156,14 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[18]:
+# In[20]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
 
 
-# In[20]:
+# In[21]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
