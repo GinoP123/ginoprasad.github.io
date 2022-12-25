@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-# In[25]:
+# In[1]:
 
 
 import os
@@ -12,38 +12,38 @@ import shutil
 
 # # Convert notebooks to html
 
-# In[26]:
+# In[2]:
 
 
 metadata_path = 'metadata.yaml'
 
 
-# In[27]:
+# In[3]:
 
 
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[28]:
+# In[4]:
 
 
 metadata
 
 
-# In[29]:
+# In[5]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
 
 
-# In[30]:
+# In[6]:
 
 
 max_base_filename_length = 50
 
 
-# In[31]:
+# In[7]:
 
 
 project_names, project_paths = [], []
@@ -74,38 +74,38 @@ for project_notebook_path in metadata['Projects']:
     print('\n')
 
 
-# In[32]:
+# In[8]:
 
 
 index_html_path = 'index.html'
 
 
-# In[33]:
+# In[9]:
 
 
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[34]:
+# In[10]:
 
 
 project_list_index_start = index_html_lines.index('<ul>\n') + 1
 project_list_index_end = index_html_lines.index('</ul>\n')
 
 
-# In[35]:
+# In[11]:
 
 
 new_project_list =  [f'\t<li><a href="projects/{os.path.basename(html_path)}">{name}</a></li>\n' for name, html_path in zip(project_names, project_paths)]
 
 
-# In[36]:
+# In[12]:
 
 
 new_project_list
 
 
-# In[37]:
+# In[13]:
 
 
 index_html_lines = index_html_lines[:project_list_index_start] + new_project_list + index_html_lines[project_list_index_end:]
@@ -113,26 +113,26 @@ index_html_lines = index_html_lines[:project_list_index_start] + new_project_lis
 
 # # Copying Resume and Updating Links
 
-# In[38]:
+# In[14]:
 
 
 assert shutil.copy(metadata['Resume'], f"projects/{os.path.basename(metadata['Resume'])}")
 
 
-# In[39]:
+# In[15]:
 
 
 index_html_lines
 
 
-# In[40]:
+# In[16]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['Resume', 'LinkedIn', 'GitHub']}
 tag_dict['Resume'] = f"projects/{os.path.basename(tag_dict['Resume'])}"
 
 
-# In[41]:
+# In[17]:
 
 
 for i, line in enumerate(index_html_lines):
@@ -150,11 +150,17 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[42]:
+# In[18]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
+
+
+# In[20]:
+
+
+sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
 
 
 # In[ ]:
