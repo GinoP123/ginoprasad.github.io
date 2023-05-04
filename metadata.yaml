@@ -3,6 +3,7 @@ Resume: "/Users/ginoprasad/_Receipts/pdf_files/Gino_Prasad_Resume.pdf"
 LinkedIn: "https://www.linkedin.com/in/ginoprasad"
 GitHub: "https://github.com/GinoP123"
 Projects:
+  - "/Users/ginoprasad/ai_stuff/autotune_phase_vocoder/Autotune_MUS_15.ipynb"
   - "/Users/ginoprasad/eng_math/fast_fourier_transform.ipynb"
   - "/Users/ginoprasad/ai_stuff/unet_implementation.ipynb"
   - "/Users/ginoprasad/ai_stuff/text_classifier/Multilayer Neural Network.ipynb"
