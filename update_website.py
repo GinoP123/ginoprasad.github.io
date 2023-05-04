@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[26]:
+# In[46]:
 
 
 import os
@@ -12,32 +12,32 @@ import shutil
 
 # # Convert notebooks to html
 
-# In[27]:
+# In[47]:
 
 
 os.chdir('/Users/ginoprasad/ginoprasad.github.io')
 
 
-# In[28]:
+# In[48]:
 
 
 metadata_path = 'metadata.yaml'
 
 
-# In[29]:
+# In[49]:
 
 
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[30]:
+# In[50]:
 
 
 metadata
 
 
-# In[31]:
+# In[51]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
@@ -63,7 +63,7 @@ for project_notebook_path in metadata['Projects']:
     project_name = project_name[:project_name.index('<')]
     print(f'Project Name: {project_name}')
 
-    project_base_path = os.path.basename(project_notebook_path)
+    project_base_path = os.path.basename(project_notebook_path)[:len('.ipynb')]
     while len(project_base_path) > max_base_filename_length:
         project_base_path = ' '.join(project_base_path.split(' ')[:-1])
     
