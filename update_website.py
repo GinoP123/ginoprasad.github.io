@@ -63,7 +63,7 @@ for project_notebook_path in metadata['Projects']:
     project_name = project_name[:project_name.index('<')]
     print(f'Project Name: {project_name}')
 
-    project_base_path = os.path.basename(project_notebook_path)[:len('.ipynb')]
+    project_base_path = os.path.basename(project_notebook_path)[:-len('.ipynb')]
     while len(project_base_path) > max_base_filename_length:
         project_base_path = ' '.join(project_base_path.split(' ')[:-1])
     
