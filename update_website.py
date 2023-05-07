@@ -61,7 +61,7 @@ temp_path = f'{os.getcwd()}/projects/temp.html'
 max_base_filename_length = 50
 
 
-# In[10]:
+# In[9]:
 
 
 project_names, project_paths = [], []
@@ -98,38 +98,38 @@ for project_notebook_path in metadata['Projects']:
     print('\n')
 
 
-# In[21]:
+# In[10]:
 
 
 index_html_path = 'index.html'
 
 
-# In[22]:
+# In[11]:
 
 
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[23]:
+# In[12]:
 
 
 project_list_index_start = index_html_lines.index('<ul>\n') + 1
 project_list_index_end = index_html_lines.index('</ul>\n')
 
 
-# In[24]:
+# In[13]:
 
 
 new_project_list =  [f'\t<li><a href="projects/{os.path.basename(html_path)}">{name}</a></li>\n' for name, html_path in zip(project_names, project_paths)]
 
 
-# In[25]:
+# In[14]:
 
 
 new_project_list
 
 
-# In[26]:
+# In[15]:
 
 
 index_html_lines = index_html_lines[:project_list_index_start] + new_project_list + index_html_lines[project_list_index_end:]
@@ -137,26 +137,26 @@ index_html_lines = index_html_lines[:project_list_index_start] + new_project_lis
 
 # # Copying CV and Updating Links
 
-# In[27]:
+# In[16]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[28]:
+# In[17]:
 
 
 index_html_lines
 
 
-# In[29]:
+# In[18]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub']}
 tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 
 
-# In[30]:
+# In[19]:
 
 
 for i, line in enumerate(index_html_lines):
@@ -174,14 +174,14 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[31]:
+# In[20]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
 
 
-# In[32]:
+# In[21]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -189,7 +189,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[46]:
+# In[22]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
