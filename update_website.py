@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[46]:
+# In[2]:
 
 
 import os
@@ -170,10 +170,12 @@ with open(index_html_path, 'w') as outfile:
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
 
 
-# In[ ]:
+# # Updating Python Script
+
+# In[7]:
 
 
-
+sp.run(f"jupyter nbconvert --to script 'update_website.ipynb' --output 'update_website'", shell=True)
 
 
 # In[ ]:

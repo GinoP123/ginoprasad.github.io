@@ -1,15 +1,14 @@
----
-Resume: "/Users/ginoprasad/_Receipts/pdf_files/Gino_Prasad_Resume.pdf"
-LinkedIn: "https://www.linkedin.com/in/ginoprasad"
-GitHub: "https://github.com/GinoP123"
+GitHub: https://github.com/GinoP123
+LinkedIn: https://www.linkedin.com/in/ginoprasad
+CV: /Users/ginoprasad/_Receipts/pdf_files/Gino_Prasad_CV.pdf
 Projects:
-  - "/Users/ginoprasad/ai_stuff/autotune_phase_vocoder/Autotune_MUS_15.ipynb"
-  - "/Users/ginoprasad/eng_math/fast_fourier_transform.ipynb"
-  - "/Users/ginoprasad/ai_stuff/unet_implementation.ipynb"
-  - "/Users/ginoprasad/ai_stuff/text_classifier/Multilayer Neural Network.ipynb"
-  - "/Users/ginoprasad/ai_stuff/text_classifier/Image Segmenter.ipynb"
-  - "/Users/ginoprasad/ai_stuff/text_classifier/Handwriten Text Parser.ipynb"
-  - "/Users/ginoprasad/ai_stuff/Gaussian Blur Test.ipynb"
-  - "/Users/ginoprasad/ai_stuff/audio_transcriber/play_note.ipynb"
-  - "/Users/ginoprasad/eng_math/interpolation.ipynb"
-  - "/Users/ginoprasad/ai_stuff/edge_detector.ipynb"
+- /Users/ginoprasad/ai_stuff/autotune_phase_vocoder/Autotune_MUS_15.ipynb
+- /Users/ginoprasad/eng_math/fast_fourier_transform.ipynb
+- /Users/ginoprasad/ai_stuff/unet_implementation.ipynb
+- /Users/ginoprasad/ai_stuff/text_classifier/Multilayer Neural Network.ipynb
+- /Users/ginoprasad/ai_stuff/text_classifier/Image Segmenter.ipynb
+- /Users/ginoprasad/ai_stuff/text_classifier/Handwriten Text Parser.ipynb
+- /Users/ginoprasad/ai_stuff/Gaussian Blur Test.ipynb
+- /Users/ginoprasad/ai_stuff/audio_transcriber/play_note.ipynb
+- /Users/ginoprasad/eng_math/interpolation.ipynb
+- /Users/ginoprasad/ai_stuff/edge_detector.ipynb
