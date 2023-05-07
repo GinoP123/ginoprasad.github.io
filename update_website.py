@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[33]:
 
 
 import os
@@ -12,32 +12,43 @@ import shutil
 
 # # Convert notebooks to html
 
-# In[47]:
+# In[34]:
 
 
 os.chdir('/Users/ginoprasad/ginoprasad.github.io')
 
 
-# In[48]:
+# In[35]:
 
 
 metadata_path = 'metadata.yaml'
 
 
-# In[49]:
+# In[36]:
 
 
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[50]:
+# In[37]:
+
+
+for project_notebook_path in metadata['Projects']:
+    if not os.path.exists(project_notebook_path):
+        print(f"REMOVING {project_notebook_path}")
+        metadata['Projects'].remove(project_notebook_path)
+        with open(metadata_path, 'w') as outfile:
+            yaml.dump(metadata, outfile, default_flow_style=False)
+
+
+# In[38]:
 
 
 metadata
 
 
-# In[51]:
+# In[39]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
@@ -118,12 +129,12 @@ new_project_list
 index_html_lines = index_html_lines[:project_list_index_start] + new_project_list + index_html_lines[project_list_index_end:]
 
 
-# # Copying Resume and Updating Links
+# # Copying CV and Updating Links
 
-# In[40]:
+# In[32]:
 
 
-assert shutil.copy(metadata['Resume'], f"projects/{os.path.basename(metadata['Resume'])}")
+assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
 # In[41]:
@@ -135,8 +146,8 @@ index_html_lines
 # In[42]:
 
 
-tag_dict = {tag: metadata[tag] for tag in ['Resume', 'LinkedIn', 'GitHub']}
-tag_dict['Resume'] = f"projects/{os.path.basename(tag_dict['Resume'])}"
+tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub']}
+tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 
 
 # In[43]:
@@ -172,7 +183,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[7]:
+# In[8]:
 
 
 sp.run(f"jupyter nbconvert --to script 'update_website.ipynb' --output 'update_website'", shell=True)
