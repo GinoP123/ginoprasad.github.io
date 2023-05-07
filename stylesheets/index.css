@@ -1,0 +1,27 @@
+.index {
+	margin-left: 2rem;
+}
+
+.name {
+	text-align: center;
+	width: 100%;
+}
+
+
+.about_container {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 50rem 1fr;
+}
+.about {
+	text-align: center;
+}
+
+body {
+	font-family: Monospace;
+	font-size: 1rem;
+}
+
+li {
+	padding-bottom: 1rem;
+}
