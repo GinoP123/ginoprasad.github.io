@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[18]:
 
 
 import os
@@ -12,55 +12,56 @@ import shutil
 
 # # Convert notebooks to html
 
-# In[2]:
+# In[19]:
 
 
 os.chdir('/Users/ginoprasad/ginoprasad.github.io')
 
 
-# In[3]:
+# In[20]:
 
 
 metadata_path = 'metadata.yaml'
 
 
-# In[4]:
+# In[21]:
 
 
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[5]:
+# In[22]:
 
 
-for project_notebook_path in metadata['Projects']:
+for project_notebook_path in metadata['Projects'][:]:
     if not os.path.exists(project_notebook_path):
         print(f"REMOVING {project_notebook_path}")
         metadata['Projects'].remove(project_notebook_path)
         with open(metadata_path, 'w') as outfile:
             yaml.dump(metadata, outfile, default_flow_style=False)
+        
 
 
-# In[6]:
+# In[23]:
 
 
 metadata
 
 
-# In[7]:
+# In[24]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
 
 
-# In[8]:
+# In[25]:
 
 
 max_base_filename_length = 50
 
 
-# In[9]:
+# In[ ]:
 
 
 project_names, project_paths = [], []
