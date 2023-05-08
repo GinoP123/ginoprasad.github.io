@@ -12,26 +12,26 @@ import shutil
 
 # # Convert notebooks to html
 
-# In[2]:
+# In[11]:
 
 
 os.chdir('/Users/ginoprasad/ginoprasad.github.io')
 
 
-# In[3]:
+# In[12]:
 
 
 metadata_path = 'metadata.yaml'
 
 
-# In[4]:
+# In[13]:
 
 
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[5]:
+# In[14]:
 
 
 for project_notebook_path in metadata['Projects'][:]:
@@ -43,25 +43,25 @@ for project_notebook_path in metadata['Projects'][:]:
         
 
 
-# In[6]:
+# In[15]:
 
 
 metadata
 
 
-# In[7]:
+# In[16]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
 
 
-# In[8]:
+# In[17]:
 
 
 max_base_filename_length = 50
 
 
-# In[9]:
+# In[19]:
 
 
 project_names, project_paths = [], []
@@ -72,7 +72,7 @@ for project_notebook_path in metadata['Projects']:
     with open(temp_path) as infile:
         lines = infile.readlines()
     with open(temp_path, 'w') as outfile:
-        lines.insert(5, '  <iframe src="../header.html" style="height: fit-content; width: 100%" frameborder="0" scrolling="no"></iframe>\n')
+        lines.insert(5, '<link rel="icon" href="../docs/assets/star_img.png"><iframe src="../header.html" style="height: fit-content; width: 100%" frameborder="0" scrolling="no"></iframe>\n')
         outfile.write(''.join(lines))
     
     title_line = sp.run(f"grep '<h1' '{temp_path}'", shell=True, capture_output=True).stdout.decode().split('\n')[0]
@@ -189,7 +189,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[24]:
+# In[10]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
