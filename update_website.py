@@ -12,26 +12,26 @@ import shutil
 
 # # Convert notebooks to html
 
-# In[11]:
+# In[2]:
 
 
 os.chdir('/Users/ginoprasad/ginoprasad.github.io')
 
 
-# In[12]:
+# In[3]:
 
 
 metadata_path = 'metadata.yaml'
 
 
-# In[13]:
+# In[4]:
 
 
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[14]:
+# In[5]:
 
 
 for project_notebook_path in metadata['Projects'][:]:
@@ -43,25 +43,25 @@ for project_notebook_path in metadata['Projects'][:]:
         
 
 
-# In[15]:
+# In[6]:
 
 
 metadata
 
 
-# In[16]:
+# In[7]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
 
 
-# In[17]:
+# In[8]:
 
 
 max_base_filename_length = 50
 
 
-# In[19]:
+# In[29]:
 
 
 project_names, project_paths = [], []
@@ -71,10 +71,7 @@ for project_notebook_path in metadata['Projects']:
     
     with open(temp_path) as infile:
         lines = infile.readlines()
-    with open(temp_path, 'w') as outfile:
-        lines.insert(5, '<link rel="icon" href="../docs/assets/star_img.png"><iframe src="../header.html" style="height: fit-content; width: 100%" frameborder="0" scrolling="no"></iframe>\n')
-        outfile.write(''.join(lines))
-    
+
     title_line = sp.run(f"grep '<h1' '{temp_path}'", shell=True, capture_output=True).stdout.decode().split('\n')[0]
     project_name = title_line[title_line.index('>')+1:]
     project_name = project_name[:project_name.index('<')]
@@ -83,6 +80,12 @@ for project_notebook_path in metadata['Projects']:
     project_base_path = os.path.basename(project_notebook_path)[:-len('.ipynb')]
     while len(project_base_path) > max_base_filename_length:
         project_base_path = ' '.join(project_base_path.split(' ')[:-1])
+    title = ' '.join(map(lambda x: x[0].upper() + x[1:] if x else x, project_base_path.split('_')))
+    lines[5] = lines[5][:len('<title>')] + title + lines[5][lines[5].index('</title>'):]
+ 
+    with open(temp_path, 'w') as outfile:
+        lines.insert(5, '<link rel="icon" href="../docs/assets/star_img.png"><iframe src="../header.html" style="height: fit-content; width: 100%" frameborder="0" scrolling="no"></iframe>\n')
+        outfile.write(''.join(lines))
     
     if not project_base_path:
         print(f"\n\n\n\n\tWarning: Project '{project_name}' Name exceeds recommended length\n\n\n\n")
@@ -189,7 +192,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[10]:
+# In[20]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
