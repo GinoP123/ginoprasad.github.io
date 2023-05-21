@@ -132,52 +132,52 @@ project_list_index_start = index_html_lines.index('\t\t<ul>\n') + 1
 project_list_index_end = index_html_lines.index('\t\t</ul>\n')
 
 
-# In[15]:
+# In[ ]:
 
 
 new_project_list =  [f'\t\t\t<li><a href="projects/{os.path.basename(html_path)}">{name}</a></li>\n' for name, html_path in zip(project_names, project_paths)]
 
 
-# In[16]:
+# In[ ]:
 
 
 new_project_list
 
 
-# In[17]:
+# In[ ]:
 
 
 index_html_lines = index_html_lines[:project_list_index_start] + new_project_list + index_html_lines[project_list_index_end:]
 
 
-# In[18]:
+# In[ ]:
 
 
-index_html_lines[project_list_index_start-1] = f"\t\t<h2> Cool Projects ({len(metadata['Projects'])}) </h2>"
+index_html_lines[project_list_index_start-2] = f"\t\t<h2> Cool Projects ({len(metadata['Projects'])}) </h2>\n"
 
 
 # # Copying CV and Updating Links
 
-# In[19]:
+# In[ ]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[20]:
+# In[ ]:
 
 
 index_html_lines
 
 
-# In[21]:
+# In[ ]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub']}
 tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 
 
-# In[22]:
+# In[ ]:
 
 
 for i, line in enumerate(index_html_lines):
@@ -195,14 +195,14 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[23]:
+# In[ ]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
 
 
-# In[24]:
+# In[ ]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -210,7 +210,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[25]:
+# In[ ]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
