@@ -12,26 +12,26 @@ import shutil
 
 # # Convert notebooks to html
 
-# In[11]:
+# In[2]:
 
 
 os.chdir('/Users/ginoprasad/ginoprasad.github.io')
 
 
-# In[12]:
+# In[3]:
 
 
 metadata_path = 'metadata.yaml'
 
 
-# In[13]:
+# In[4]:
 
 
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[14]:
+# In[5]:
 
 
 for project_notebook_path in metadata['Projects'][:]:
@@ -43,37 +43,37 @@ for project_notebook_path in metadata['Projects'][:]:
         
 
 
-# In[15]:
+# In[6]:
 
 
 metadata
 
 
-# In[16]:
+# In[7]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
 
 
-# In[17]:
+# In[8]:
 
 
 max_base_filename_length = 50
 
 
-# In[19]:
+# In[9]:
 
 
 temp_path
 
 
-# In[20]:
+# In[10]:
 
 
 project_notebook_path
 
 
-# In[18]:
+# In[11]:
 
 
 project_names, project_paths = [], []
@@ -96,7 +96,7 @@ for project_notebook_path in metadata['Projects']:
     lines[5] = lines[5][:len('<title>')] + title + lines[5][lines[5].index('</title>'):]
  
     with open(temp_path, 'w') as outfile:
-        lines.insert(5, '<link rel="icon" href="../docs/assets/logo.png"><iframe src="../header.html" style="height: 17rem; width: 100%" frameborder="0" scrolling="no"></iframe>\n')
+        lines.insert(5, '<link rel="icon" href="../docs/assets/logo.png"><iframe src="../header.html" style="height: 12rem; width: 100%" frameborder="0" scrolling="no"></iframe>\n')
         outfile.write(''.join(lines))
     
     if not project_base_path:
@@ -113,65 +113,71 @@ for project_notebook_path in metadata['Projects']:
     print('\n')
 
 
-# In[10]:
+# In[12]:
 
 
 index_html_path = 'index.html'
 
 
-# In[11]:
+# In[13]:
 
 
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[12]:
+# In[14]:
 
 
 project_list_index_start = index_html_lines.index('\t\t<ul>\n') + 1
 project_list_index_end = index_html_lines.index('\t\t</ul>\n')
 
 
-# In[13]:
+# In[15]:
 
 
 new_project_list =  [f'\t\t\t<li><a href="projects/{os.path.basename(html_path)}">{name}</a></li>\n' for name, html_path in zip(project_names, project_paths)]
 
 
-# In[14]:
+# In[16]:
 
 
 new_project_list
 
 
-# In[15]:
+# In[17]:
 
 
 index_html_lines = index_html_lines[:project_list_index_start] + new_project_list + index_html_lines[project_list_index_end:]
 
 
+# In[18]:
+
+
+index_html_lines[project_list_index_start-1] = f"\t\t<h2> Cool Projects ({len(metadata['Projects'])}) </h2>"
+
+
 # # Copying CV and Updating Links
 
-# In[16]:
+# In[19]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[17]:
+# In[20]:
 
 
 index_html_lines
 
 
-# In[18]:
+# In[21]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub']}
 tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 
 
-# In[19]:
+# In[22]:
 
 
 for i, line in enumerate(index_html_lines):
@@ -189,14 +195,14 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[20]:
+# In[23]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
 
 
-# In[21]:
+# In[ ]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -204,7 +210,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[22]:
+# In[ ]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
