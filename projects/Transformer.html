@@ -14643,12 +14643,14 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 </pre></div>
 
      </div>
@@ -14886,7 +14888,23 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">trip_time</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">embedding_size_call_type</span><span class="o">=</span><span class="n">num_call_types</span>
@@ -14906,7 +14924,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[54]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">num_hiddens</span> <span class="o">=</span> <span class="mi">100</span>
@@ -14923,11 +14941,22 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[55]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[61]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Transformer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_hiddens</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">transpose_qkv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">transpose_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reverse the operation of transpose_qkv.&quot;&quot;&quot;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        
+        
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_hiddens</span><span class="p">,</span> <span class="n">num_heads</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">embedding_call_type</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">num_call_types</span><span class="p">,</span> <span class="n">embedding_size_call_type</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">embedding_weekday</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">num_weekdays</span><span class="p">,</span> <span class="n">embedding_size_weekday</span><span class="p">)</span>
@@ -14941,18 +14970,29 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
         <span class="bp">self</span><span class="o">.</span><span class="n">W_q</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LazyLinear</span><span class="p">(</span><span class="n">num_hiddens</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">W_k</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LazyLinear</span><span class="p">(</span><span class="n">num_hiddens</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">W_v</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LazyLinear</span><span class="p">(</span><span class="n">num_hiddens</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">W_o</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LazyLinear</span><span class="p">(</span><span class="n">num_hiddens</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">W_o</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LazyLinear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_output</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LazyLinear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span> <span class="o">=</span> <span class="n">num_heads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_hiddens</span> <span class="o">=</span> <span class="n">num_hiddens</span>
     
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queries</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="n">query_embeddings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span><span class="n">queries</span><span class="p">)</span>
         <span class="n">key_embeddings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
-        
-        <span class="n">query_embeddings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">W_q</span><span class="p">(</span><span class="n">query_embeddings</span><span class="p">)</span>
-        <span class="n">key_embeddings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">W_k</span><span class="p">(</span><span class="n">key_embeddings</span><span class="p">)</span>
-        
-        <span class="nb">print</span><span class="p">(</span><span class="n">query_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
-<span class="n">transformer</span> <span class="o">=</span> <span class="n">Transformer</span><span class="p">(</span><span class="n">num_hiddens</span><span class="p">)</span>
+        <span class="n">query_embeddings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transpose_qkv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W_q</span><span class="p">(</span><span class="n">query_embeddings</span><span class="p">))</span>
+        <span class="n">key_embeddings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transpose_qkv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W_k</span><span class="p">(</span><span class="n">key_embeddings</span><span class="p">))</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transpose_qkv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W_v</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
+        
+        <span class="c1"># Swap the last two dimensions of keys with keys.transpose(1, 2)</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="n">query_embeddings</span><span class="p">,</span> <span class="n">key_embeddings</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_embedding_size</span><span class="p">)</span>
+        <span class="n">attention_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+        <span class="n">attention_values</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">attention_weights</span><span class="p">),</span> <span class="n">values</span><span class="p">)</span>
+        <span class="n">output_concat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transpose_output</span><span class="p">(</span><span class="n">attention_values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W_o</span><span class="p">(</span><span class="n">output_concat</span><span class="p">))</span>
+<span class="n">transformer</span> <span class="o">=</span> <span class="n">Transformer</span><span class="p">(</span><span class="n">num_hiddens</span><span class="p">,</span> <span class="n">num_heads</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14974,11 +15014,8 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>
-<span class="ansi-cyan-fg">  Input </span><span class="ansi-green-fg">In [55]</span>
-<span class="ansi-red-fg">    self.</span>
-         ^
-<span class="ansi-red-fg">SyntaxError</span><span class="ansi-red-fg">:</span> invalid syntax
+<pre>/Users/ginoprasad/miniconda3/envs/torch-gpu/lib/python3.9/site-packages/torch/nn/modules/lazy.py:180: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
+  warnings.warn(&#39;Lazy modules are a new feature under heavy development &#39;
 </pre>
 </div>
 </div>
@@ -14992,11 +15029,30 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[52]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[62]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">key_value_size</span> <span class="o">=</span> <span class="mi">50</span> 
-<span class="n">query_size</span> <span class="o">=</span> <span class="mi">50</span> <span class="c1"># Same as batch size</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">key_value_size</span> <span class="o">=</span> <span class="n">query_size</span> <span class="o">=</span> <span class="mi">1000</span> <span class="c1"># Same as batch size</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[63]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
+<span class="n">MSE</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+<span class="n">criterion</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">MSE</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">transformer</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
 </pre></div>
 
      </div>
@@ -15009,10 +15065,62 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[53]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">transformer</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">dataset</span><span class="p">[:</span><span class="n">query_size</span><span class="p">],</span> <span class="n">dataset</span><span class="p">[:</span><span class="n">key_value_size</span><span class="p">],</span> <span class="n">trip_time</span><span class="p">[:</span><span class="n">key_value_size</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">training_losses</span><span class="p">,</span> <span class="n">validation_losses</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">epoch_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">key_groupings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_x</span><span class="p">))</span>
+    <span class="n">query_groupings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_x</span><span class="p">))</span>
+    <span class="n">curr_loss</span> <span class="o">=</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">batch_index</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span> <span class="o">//</span> <span class="n">key_value_size</span><span class="p">)):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">key_groupings</span><span class="p">[</span><span class="n">batch_index</span><span class="o">*</span><span class="n">key_value_size</span><span class="p">:(</span><span class="n">batch_index</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">key_value_size</span><span class="p">]</span>
+        <span class="n">keys</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">train_x</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">train_y</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        
+        <span class="n">query</span> <span class="o">=</span> <span class="n">query_groupings</span><span class="p">[</span><span class="n">batch_index</span><span class="o">*</span><span class="n">key_value_size</span><span class="p">:(</span><span class="n">batch_index</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">key_value_size</span><span class="p">]</span>
+        <span class="n">queries</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">train_x</span><span class="p">[</span><span class="n">query</span><span class="p">],</span> <span class="n">train_y</span><span class="p">[</span><span class="n">query</span><span class="p">]</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">transformer</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="c1"># Resetting gradients</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span> 
+
+        <span class="c1"># Computing Loss</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span> <span class="c1"># Updates Weights and Biases</span>
+        
+        <span class="n">curr_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+    <span class="n">training_loss</span> <span class="o">=</span> <span class="n">curr_loss</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TRAIN LOSS: &quot;</span><span class="p">,</span> <span class="n">curr_loss</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+    
+    <span class="n">curr_loss</span> <span class="o">=</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">key_groupings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_x</span><span class="p">))</span>
+        <span class="n">query_groupings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_x</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">batch_index</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span> <span class="o">//</span> <span class="n">key_value_size</span><span class="p">)):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">key_groupings</span><span class="p">[</span><span class="n">batch_index</span><span class="o">*</span><span class="n">key_value_size</span><span class="p">:(</span><span class="n">batch_index</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">key_value_size</span><span class="p">]</span>
+            <span class="n">keys</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">train_x</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">train_y</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query_groupings</span><span class="p">[</span><span class="n">batch_index</span><span class="o">*</span><span class="n">key_value_size</span><span class="p">:(</span><span class="n">batch_index</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">key_value_size</span><span class="p">]</span>
+            <span class="n">queries</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">test_x</span><span class="p">[</span><span class="n">query</span><span class="p">],</span> <span class="n">test_y</span><span class="p">[</span><span class="n">query</span><span class="p">]</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">transformer</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+            <span class="c1"># Resetting gradients</span>
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span> 
+
+            <span class="c1"># Computing Loss</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+            <span class="n">curr_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">validation_loss</span> <span class="o">=</span> <span class="n">curr_loss</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;VAL LOSS: &quot;</span><span class="p">,</span> <span class="n">validation_loss</span><span class="p">)</span>
+        
+    
+    <span class="n">training_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">training_loss</span><span class="p">)</span>
+    <span class="n">validation_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">validation_loss</span><span class="p">)</span>
+
+    <span class="c1"># print loss after every epoch</span>
+<span class="c1">#     print(f&quot;Epoch: {epoch_num}, \t\t Loss: {training_loss}, \t\t Val Loss: {validation_loss}&quot;)</span>
 </pre></div>
 
      </div>
@@ -15033,14 +15141,285 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>torch.Size([50, 490])
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|███████████████████████| 1278/1278 [01:20&lt;00:00, 15.83it/s]
 </pre>
 </div>
 </div>
 
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>TRAIN LOSS:  643.2511621275231
+</pre>
+</div>
 </div>
 
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 426/426 [00:19&lt;00:00, 21.45it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VAL LOSS:  646.4367203690076
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|███████████████████████| 1278/1278 [01:36&lt;00:00, 13.19it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>TRAIN LOSS:  637.3989978008241
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 426/426 [00:22&lt;00:00, 18.72it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VAL LOSS:  642.9782627445991
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|███████████████████████| 1278/1278 [01:34&lt;00:00, 13.59it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>TRAIN LOSS:  638.3898696541227
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 426/426 [00:20&lt;00:00, 21.08it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VAL LOSS:  642.8843358715935
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|███████████████████████| 1278/1278 [01:23&lt;00:00, 15.30it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>TRAIN LOSS:  636.4162471096654
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 426/426 [00:20&lt;00:00, 20.96it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VAL LOSS:  643.2121794794647
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|███████████████████████| 1278/1278 [01:25&lt;00:00, 14.90it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>TRAIN LOSS:  634.7229127361554
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 426/426 [00:20&lt;00:00, 20.74it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VAL LOSS:  642.6489323002631
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre> 20%|████▊                   | 254/1278 [00:20&lt;01:09, 14.73it/s]</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[28]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_data_path</span> <span class="o">=</span> <span class="s1">&#39;/Users/ginoprasad/_School/CSE_151B/CSE151B_Project/archive/preprocessed_test_data.csv&#39;</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[29]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preprocessed_test_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">test_data_path</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
 </div>
 
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -15048,10 +15427,10 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[47]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[30]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span><span class="p">[:</span><span class="n">key_value_size</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preprocessed_test_data</span>
 </pre></div>
 
      </div>
@@ -15069,13 +15448,225 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[47]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[30]:</div>
 
 
 
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>torch.Size([50, 5])</pre>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>TRIP_ID</th>
+      <th>CALL_TYPE</th>
+      <th>ORIGIN_CALL</th>
+      <th>ORIGIN_STAND</th>
+      <th>TAXI_ID</th>
+      <th>TIMESTAMP</th>
+      <th>DAY_TYPE</th>
+      <th>MISSING_DATA</th>
+      <th>TAXI_INDEX</th>
+      <th>weekday</th>
+      <th>hour</th>
+      <th>month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>T1</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>20000542</td>
+      <td>1408039037</td>
+      <td>A</td>
+      <td>False</td>
+      <td>351</td>
+      <td>3</td>
+      <td>10</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>T2</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>57.0</td>
+      <td>20000108</td>
+      <td>1408038611</td>
+      <td>A</td>
+      <td>False</td>
+      <td>88</td>
+      <td>3</td>
+      <td>10</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>T3</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>15.0</td>
+      <td>20000370</td>
+      <td>1408038568</td>
+      <td>A</td>
+      <td>False</td>
+      <td>248</td>
+      <td>3</td>
+      <td>10</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>T4</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>53.0</td>
+      <td>20000492</td>
+      <td>1408039090</td>
+      <td>A</td>
+      <td>False</td>
+      <td>318</td>
+      <td>3</td>
+      <td>10</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>T5</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>18.0</td>
+      <td>20000621</td>
+      <td>1408039177</td>
+      <td>A</td>
+      <td>False</td>
+      <td>402</td>
+      <td>3</td>
+      <td>10</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>315</th>
+      <td>315</td>
+      <td>T323</td>
+      <td>0</td>
+      <td>70885.0</td>
+      <td>NaN</td>
+      <td>20000430</td>
+      <td>1419171485</td>
+      <td>A</td>
+      <td>False</td>
+      <td>280</td>
+      <td>6</td>
+      <td>6</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>316</th>
+      <td>316</td>
+      <td>T324</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>53.0</td>
+      <td>20000020</td>
+      <td>1419170802</td>
+      <td>A</td>
+      <td>False</td>
+      <td>27</td>
+      <td>6</td>
+      <td>6</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>317</th>
+      <td>317</td>
+      <td>T325</td>
+      <td>2</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>20000207</td>
+      <td>1419172121</td>
+      <td>A</td>
+      <td>False</td>
+      <td>150</td>
+      <td>6</td>
+      <td>6</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>318</th>
+      <td>318</td>
+      <td>T326</td>
+      <td>0</td>
+      <td>76232.0</td>
+      <td>NaN</td>
+      <td>20000667</td>
+      <td>1419171980</td>
+      <td>A</td>
+      <td>False</td>
+      <td>421</td>
+      <td>6</td>
+      <td>6</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>319</th>
+      <td>319</td>
+      <td>T327</td>
+      <td>0</td>
+      <td>31208.0</td>
+      <td>NaN</td>
+      <td>20000255</td>
+      <td>1419171420</td>
+      <td>A</td>
+      <td>False</td>
+      <td>176</td>
+      <td>6</td>
+      <td>6</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+<p>320 rows × 13 columns</p>
+</div>
 </div>
 
 </div>
@@ -15084,7 +15675,27 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 </div>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[32]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_call_type</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">preprocessed_test_data</span><span class="p">[</span><span class="s1">&#39;CALL_TYPE&#39;</span><span class="p">])</span>
+<span class="n">test_weekday</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">preprocessed_test_data</span><span class="p">[</span><span class="s1">&#39;weekday&#39;</span><span class="p">])</span>
+<span class="n">test_hour</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">preprocessed_test_data</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">])</span>
+<span class="n">test_month</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">preprocessed_test_data</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">])</span>
+<span class="n">test_taxi_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">preprocessed_test_data</span><span class="p">[</span><span class="s1">&#39;TAXI_INDEX&#39;</span><span class="p">])</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -15092,43 +15703,12 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[34]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_index_dataset</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">test_call_type</span><span class="p">,</span> <span class="n">test_weekday</span><span class="p">,</span> <span class="n">test_hour</span><span class="p">,</span> <span class="n">test_month</span><span class="p">,</span> <span class="n">test_taxi_index</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
 </pre></div>
 
      </div>
 </div>
 </div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[34]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>tensor([[  1,   0,   0,   6, 366],
-        [  0,   0,   0,   6, 370],
-        [  1,   0,   0,   6, 203],
-        ...,
-        [  1,   0,  23,   5, 414],
-        [  0,   0,  15,   5, 160],
-        [  0,   0,  19,   5,  59]])</pre>
-</div>
-
-</div>
-
-</div>
-
 </div>
 
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -15136,10 +15716,19 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[33]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[57]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span><span class="p">[:</span><span class="n">key_value_size</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">transformer</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">test_predictions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">key_groupings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_x</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">batch_index</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span> <span class="o">//</span> <span class="n">key_value_size</span><span class="p">)):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">key_groupings</span><span class="p">[</span><span class="n">batch_index</span><span class="o">*</span><span class="n">key_value_size</span><span class="p">:(</span><span class="n">batch_index</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">key_value_size</span><span class="p">]</span>
+        <span class="n">keys</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">train_x</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">train_y</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>        
+        <span class="n">test_predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transformer</span><span class="p">(</span><span class="n">test_index_dataset</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+<span class="n">test_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">test_predictions</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">test_predictions</span>
 </pre></div>
 
      </div>
@@ -15157,62 +15746,78 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[33]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|██████████████████████| 2130/2130 [00:02&lt;00:00, 740.98it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[57]:</div>
 
 
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>tensor([[  1,   0,   0,   6, 366],
-        [  0,   0,   0,   6, 370],
-        [  1,   0,   0,   6, 203],
-        [  1,   0,   0,   6, 329],
-        [  1,   0,   0,   6, 216],
-        [  1,   0,   0,   6, 151],
-        [  1,   0,   0,   6, 287],
-        [  1,   0,   0,   6,  10],
-        [  1,   0,   0,   6, 258],
-        [  1,   0,   0,   6, 203],
-        [  1,   0,   0,   6, 152],
-        [  1,   0,   0,   6, 329],
-        [  2,   0,   0,   6, 356],
-        [  1,   0,   0,   6, 152],
-        [  1,   0,   0,   6, 151],
-        [  0,   0,   0,   6, 312],
-        [  0,   0,   0,   6, 258],
-        [  2,   0,   0,   6, 355],
-        [  1,   0,   0,   6,   4],
-        [  1,   0,   0,   6,  66],
-        [  1,   0,   0,   6, 266],
-        [  2,   0,   0,   6, 405],
-        [  1,   0,   0,   6, 203],
-        [  0,   0,   0,   6, 196],
-        [  2,   0,   0,   6, 370],
-        [  1,   0,   0,   6, 152],
-        [  2,   0,   0,   6, 111],
-        [  1,   0,   1,   6, 370],
-        [  0,   0,   0,   6, 121],
-        [  1,   0,   1,   6, 153],
-        [  1,   0,   0,   6, 404],
-        [  1,   0,   0,   6,   8],
-        [  1,   0,   0,   6, 401],
-        [  1,   0,   0,   6, 203],
-        [  1,   0,   0,   6,   4],
-        [  1,   0,   0,   6, 267],
-        [  2,   0,   0,   6,   9],
-        [  1,   0,   0,   6, 239],
-        [  0,   0,   0,   6, 426],
-        [  1,   0,   0,   6, 274],
-        [  0,   0,   0,   6, 405],
-        [  2,   0,   0,   6, 356],
-        [  1,   0,   0,   6, 105],
-        [  1,   0,   0,   6,  66],
-        [  1,   0,   0,   6, 151],
-        [  2,   0,   0,   6, 355],
-        [  1,   0,   0,   6,  47],
-        [  1,   0,   1,   6, 370],
-        [  0,   0,   1,   6, 151],
-        [  1,   0,   1,   6,   4]])</pre>
+<pre>array([738.1631 , 913.3273 , 800.66693, 921.0333 , 594.3321 , 618.82837,
+       819.6891 , 613.2832 , 881.85144, 713.2954 , 493.67252, 739.81903,
+       690.2107 , 706.30347, 816.1045 , 798.46454, 685.1504 , 726.85376,
+       884.74493, 728.0494 , 807.44556, 667.5517 , 660.7076 , 728.5806 ,
+       825.01636, 743.902  , 628.92163, 648.5792 , 670.18365, 739.87524,
+       441.3783 , 683.4435 , 690.24786, 665.01196, 659.1917 , 655.6208 ,
+       607.5481 , 719.4541 , 761.2462 , 794.6758 , 917.0568 , 579.9953 ,
+       686.8684 , 822.9714 , 665.2472 , 627.2806 , 684.19775, 692.88367,
+       782.0736 , 595.9494 , 745.78577, 731.7202 , 766.08655, 717.8483 ,
+       717.86505, 811.8359 , 778.6105 , 728.5038 , 781.1389 , 514.75525,
+       772.88965, 752.2018 , 808.97424, 670.0339 , 781.99426, 571.2529 ,
+       807.4381 , 636.1065 , 716.03143, 760.71106, 679.674  , 616.1554 ,
+       789.50574, 614.7811 , 516.52765, 616.8722 , 634.7243 , 599.6732 ,
+       534.3038 , 556.8534 , 494.07898, 575.66223, 643.5056 , 500.96826,
+       588.45264, 566.542  , 548.20435, 642.666  , 595.05695, 558.5006 ,
+       541.51654, 617.70557, 628.9846 , 544.1824 , 824.7862 , 598.9126 ,
+       522.9484 , 566.78265, 538.36847, 685.15137, 514.78906, 607.05597,
+       655.474  , 551.431  , 620.00305, 588.60034, 605.35614, 527.4126 ,
+       599.61316, 538.5412 , 586.0751 , 497.64203, 573.0919 , 498.2963 ,
+       626.8142 , 474.43903, 572.8634 , 561.97736, 590.6476 , 706.84106,
+       495.17273, 568.4161 , 582.7476 , 613.7169 , 836.16296, 630.1471 ,
+       652.5611 , 542.03674, 642.30695, 586.712  , 537.94385, 636.1876 ,
+       718.84186, 612.03687, 576.8494 , 644.49146, 568.02716, 706.6821 ,
+       553.1592 , 593.0845 , 594.511  , 664.1725 , 539.92474, 511.61734,
+       520.88544, 536.98596, 554.4744 , 604.3038 , 551.8219 , 690.6154 ,
+       578.50635, 723.5099 , 690.6924 , 703.3543 , 856.7241 , 839.4905 ,
+       841.18304, 752.59863, 684.81934, 793.21   , 591.0976 , 869.99133,
+       620.5491 , 757.65027, 572.6177 , 930.3341 , 753.074  , 644.9791 ,
+       758.5762 , 886.44104, 748.9263 , 756.6012 , 815.3004 , 674.1407 ,
+       794.7777 , 791.16455, 778.4633 , 697.90454, 646.6631 , 729.4464 ,
+       725.69995, 758.0385 , 608.28827, 731.7366 , 897.0669 , 827.18304,
+       632.98145, 826.57874, 772.6604 , 724.18146, 734.5657 , 892.5665 ,
+       667.1649 , 879.2837 , 835.6136 , 692.29175, 795.3821 , 861.10693,
+       609.28955, 864.03467, 849.75305, 695.03064, 782.18225, 738.9487 ,
+       712.6372 , 755.32135, 871.80554, 721.5705 , 735.717  , 509.54706,
+       933.6737 , 969.7281 , 705.2295 , 809.32794, 801.4077 , 339.35028,
+       837.7726 , 792.4529 , 756.5925 , 842.6791 , 723.8835 , 738.4486 ,
+       675.30615, 821.6564 , 914.3734 , 762.2189 , 850.7499 , 675.13965,
+       627.3849 , 614.4312 , 741.8879 , 678.34534, 613.23676, 722.2323 ,
+       691.1591 , 691.52264, 686.93945, 711.6527 , 737.7162 , 634.62274,
+       718.58527, 777.87646, 832.2007 , 560.0094 , 771.3989 , 620.32904,
+       726.24976, 718.344  , 709.0065 , 573.73456, 690.8714 , 723.0208 ,
+       614.0668 , 658.74646, 640.47076, 651.94775, 658.4592 , 673.2606 ,
+       678.71704, 761.6888 , 635.7903 , 652.4365 , 718.37415, 687.31335,
+       660.4852 , 609.1558 , 854.1414 , 679.2202 , 739.1644 , 777.0766 ,
+       623.2828 , 685.3273 , 687.0869 , 580.9785 , 700.4461 , 624.4724 ,
+       727.1027 , 706.6924 , 673.21106, 583.23175, 744.7267 , 663.1713 ,
+       710.0063 , 595.5331 , 721.8685 , 618.3243 , 774.3532 , 624.4636 ,
+       651.90845, 685.33765, 597.0499 , 557.91235, 570.2933 , 625.8274 ,
+       616.8108 , 237.49304, 577.6264 , 713.303  , 630.9916 , 645.99164,
+       657.7639 , 621.10693, 555.985  , 635.511  , 536.07166, 543.7894 ,
+       542.6111 , 577.62463, 638.3353 , 495.77484, 715.1575 , 603.78436,
+       541.3065 , 635.8938 , 571.483  , 526.61926, 696.66907, 646.20294,
+       570.3985 , 591.6415 ], dtype=float32)</pre>
 </div>
 
 </div>
@@ -15226,26 +15831,12 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[58]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">transformer</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">submission</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;/Users/ginoprasad/_School/CSE_151B/CSE151B_Project/archive/sampleSubmission.csv&#39;</span><span class="p">)</span>
+<span class="n">submission</span><span class="p">[</span><span class="s1">&#39;TRAVEL_TIME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_predictions</span>
+<span class="n">submission</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;/Users/ginoprasad/Downloads/transformer.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
      </div>
