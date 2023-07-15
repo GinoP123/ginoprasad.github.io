@@ -14620,7 +14620,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[213]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[493]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="mf">0.01</span>
@@ -14633,6 +14633,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">move</span> <span class="o">=</span> <span class="n">move</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children_moves</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">get_expected_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_sum</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">visit_count</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">visit_count</span> <span class="k">else</span> <span class="mi">0</span>
@@ -14643,26 +14644,24 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
     <span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">board</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="n">children_moves</span> <span class="o">=</span> <span class="p">[</span><span class="n">move</span><span class="o">.</span><span class="n">uci</span><span class="p">()</span> <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="n">board</span><span class="o">.</span><span class="n">legal_moves</span><span class="p">]</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">children_moves</span><span class="p">:</span>
-            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children_moves</span> <span class="o">=</span> <span class="p">[</span><span class="n">move</span><span class="o">.</span><span class="n">uci</span><span class="p">()</span> <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="n">board</span><span class="o">.</span><span class="n">legal_moves</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">{</span><span class="n">move</span><span class="p">:</span> <span class="n">Node</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">move</span><span class="o">=</span><span class="n">move</span><span class="p">)</span> <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children_moves</span><span class="p">}</span>
     
     <span class="k">def</span> <span class="nf">upper_confidence_bound_score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_expected_value</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">visit_count</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">visit_count</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span>
     
     <span class="k">def</span> <span class="nf">upper_confidence_bound_score_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">upper_confidence_bound_score</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">upper_confidence_bound_score</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">children_moves</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
     
     <span class="k">def</span> <span class="nf">get_next_move</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">ucb_score_children</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_confidence_bound_score_children</span><span class="p">()</span>
         <span class="n">noisy_ucb_score_children</span> <span class="o">=</span> <span class="n">ucb_score_children</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">ucb_score_children</span><span class="p">)</span><span class="o">/</span><span class="mi">10000</span><span class="p">,</span><span class="mf">0.00001</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ucb_score_children</span><span class="p">))</span>
         <span class="c1"># Adds random noise to break ties</span>
         <span class="n">argmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">noisy_ucb_score_children</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)[</span><span class="n">argmax</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children_moves</span><span class="p">[</span><span class="n">argmax</span><span class="p">]</span>
     
     <span class="k">def</span> <span class="nf">get_probability_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">softmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_confidence_bound_score_children</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">softmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_confidence_bound_score_children</span><span class="p">())</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14675,7 +14674,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[214]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[494]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
@@ -14705,7 +14704,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[215]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[495]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">flip_board</span><span class="p">(</span><span class="n">board</span><span class="p">):</span>
@@ -14722,7 +14721,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[216]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[496]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">start_board_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span>
@@ -14753,7 +14752,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[216]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[496]:</div>
 
 
 
@@ -14829,7 +14828,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[217]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[497]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
@@ -14845,7 +14844,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[218]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[498]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">BOARD_EMBEDDING_SIZE</span> <span class="o">=</span> <span class="n">BOARD_EMBEDDING_DIM</span> <span class="o">=</span> <span class="mi">13</span>
@@ -14871,7 +14870,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[219]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[499]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
@@ -14889,7 +14888,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[220]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[500]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">CNN</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -14980,7 +14979,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[221]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[501]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">delta_mapping</span> <span class="o">=</span> <span class="p">[]</span>
@@ -15020,7 +15019,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[221]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[501]:</div>
 
 
 
@@ -15040,7 +15039,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[222]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[502]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">square_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">col_ch</span> <span class="o">+</span> <span class="n">row_ch</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">col</span><span class="p">,</span> <span class="n">row</span><span class="p">])</span> <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">row_ch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="s2">&quot;12345678&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">col_ch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="s2">&quot;abcdefgh&quot;</span><span class="p">)}</span>
@@ -15077,7 +15076,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[223]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[521]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">delta_mapping</span> <span class="o">=</span> <span class="p">[]</span>
@@ -15111,7 +15110,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[224]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[522]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">square_dict_board_update</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="p">(</span><span class="mi">7</span><span class="o">-</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">square_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
@@ -15127,7 +15126,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[225]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[523]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">promotion_pieces</span> <span class="o">=</span> <span class="p">{</span>
@@ -15173,7 +15172,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[226]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[524]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
@@ -15258,7 +15257,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[234]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[525]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">MOVE_COUNT_IDX</span> <span class="o">=</span> <span class="mi">0</span>
@@ -15293,7 +15292,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[229]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[526]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">initialize_state</span><span class="p">():</span>
@@ -15322,7 +15321,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[230]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[527]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">update_state</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">move</span><span class="p">):</span>
@@ -15334,7 +15333,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
     <span class="n">state</span><span class="p">[</span><span class="s1">&#39;repititon_count_dict&#39;</span><span class="p">][</span><span class="n">tensor_to_tuple</span><span class="p">(</span><span class="n">board_mask_white</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="n">state</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
 
-    <span class="n">move_count</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">no_progress_count</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">constant_stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">move_count</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">no_progress_count</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;constant_stack&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">move_count</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="n">no_progress_count</span> <span class="o">=</span> <span class="n">no_progress_count</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">progress</span> <span class="k">else</span> <span class="mi">0</span>
 
@@ -15342,6 +15341,130 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
     <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]:</span>
         <span class="n">p1_lc</span><span class="p">,</span> <span class="n">p1_rc</span><span class="p">,</span> <span class="n">p2_lc</span><span class="p">,</span> <span class="n">p2_rc</span> <span class="o">=</span> <span class="n">p2_lc</span><span class="p">,</span> <span class="n">p2_rc</span><span class="p">,</span> <span class="n">p1_lc</span><span class="p">,</span> <span class="n">p1_rc</span>
     <span class="n">state</span><span class="p">[</span><span class="s1">&#39;constant_stack&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">move_count</span><span class="p">,</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span> <span class="n">no_progress_count</span><span class="p">,</span> <span class="n">repitition_count_current</span><span class="p">,</span> <span class="n">p1_lc</span><span class="p">,</span> <span class="n">p1_rc</span><span class="p">,</span> <span class="n">p2_lc</span><span class="p">,</span> <span class="n">p2_rc</span><span class="p">))</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[528]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">copy_state</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+    <span class="c1"># not cloning stack obects because I am not modifying them</span>
+    <span class="n">state_copy</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;board&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> 
+                  <span class="s1">&#39;repititon_count_dict&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;repititon_count_dict&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> 
+                  <span class="s1">&#39;white_stack&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;white_stack&#39;</span><span class="p">][:],</span>
+                  <span class="s1">&#39;black_stack&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;black_stack&#39;</span><span class="p">][:],</span>
+                  <span class="s1">&#39;constant_stack&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;constant_stack&#39;</span><span class="p">][:],</span>
+                  <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
+                 <span class="p">}</span>
+    <span class="k">return</span> <span class="n">state_copy</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[529]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">previous_state</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+    <span class="n">state</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">state</span><span class="p">[</span><span class="s1">&#39;repititon_count_dict&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># Can&#39;t go backward so avoiding misuse</span>
+    <span class="n">state</span><span class="p">[</span><span class="s1">&#39;white_stack&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">state</span><span class="p">[</span><span class="s1">&#39;black_stack&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">state</span><span class="p">[</span><span class="s1">&#39;constant_stack&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">state</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[530]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">game_over</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">print_</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">print_</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_checkmate</span><span class="p">()</span> <span class="ow">or</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_stalemate</span><span class="p">()</span> <span class="ow">or</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_insufficient_material</span><span class="p">()</span> <span class="ow">or</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">can_claim_threefold_repetition</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_checkmate</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Checkmate&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_insufficient_material</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Insufficient Material&quot;</span><span class="p">)</span>  
+    <span class="k">elif</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">can_claim_threefold_repetition</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Threefold Repitition&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_stalemate</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Other Stalemate&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="Simulating-against-Random-Opponent">Simulating against Random Opponent<a class="anchor-link" href="#Simulating-against-Random-Opponent">&#182;</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[615]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">simulate_against_random_opponent</span><span class="p">(</span><span class="n">num_simulations</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">white</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">print_</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">display_moves</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">white</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">white</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getrandbits</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">draws</span> <span class="o">=</span> <span class="n">white_wins</span> <span class="o">=</span> <span class="n">black_wins</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_simulations</span><span class="p">)):</span>
+            <span class="n">state_</span> <span class="o">=</span> <span class="n">initialize_state</span><span class="p">()</span>        
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">game_over</span><span class="p">(</span><span class="n">state_</span><span class="p">,</span> <span class="n">print_</span><span class="o">=</span><span class="n">print_outcome</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">state_</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">white</span><span class="p">:</span>
+                    <span class="n">next_move</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">state_</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">legal_moves</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">CNN</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">state_</span><span class="p">)[</span><span class="mi">0</span><span class="p">])])</span><span class="o">.</span><span class="n">uci</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">next_move</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">state_</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">legal_moves</span><span class="p">))</span><span class="o">.</span><span class="n">uci</span><span class="p">()</span>
+                <span class="n">update_state</span><span class="p">(</span><span class="n">state_</span><span class="p">,</span> <span class="n">next_move</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">display_moves</span><span class="p">:</span>
+                    <span class="n">display</span><span class="p">(</span><span class="n">state_</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">state_</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_checkmate</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">state_</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]:</span>
+                <span class="n">white_wins</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">state_</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_checkmate</span><span class="p">():</span>
+                <span class="n">black_wins</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">draws</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">white</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">white_wins</span> <span class="o">-</span> <span class="n">black_wins</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_simulations</span>
 </pre></div>
 
      </div>
@@ -15365,7 +15488,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[246]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[531]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">root</span> <span class="o">=</span> <span class="n">Node</span><span class="p">()</span>
@@ -15388,366 +15511,935 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Initializing">Initializing<a class="anchor-link" href="#Initializing">&#182;</a></h3>
-</div>
-</div>
-</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[247]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">initialize_state</span><span class="p">()</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Selection">Selection<a class="anchor-link" href="#Selection">&#182;</a></h3>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[248]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">node</span> <span class="o">=</span> <span class="n">root</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[249]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">node</span><span class="o">.</span><span class="n">upper_confidence_bound_score_children</span><span class="p">()</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[249]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>tensor([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-       dtype=torch.float64)</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[250]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">node</span><span class="o">.</span><span class="n">get_next_move</span><span class="p">()</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[250]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>&#39;b2b3&#39;</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[243]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">CNN</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="n">x</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[243]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>(tensor([0.0487, 0.0497, 0.0485, 0.0515, 0.0517, 0.0504, 0.0512, 0.0499, 0.0483,
-         0.0503, 0.0486, 0.0493, 0.0506, 0.0508, 0.0485, 0.0498, 0.0523, 0.0504,
-         0.0496, 0.0500]),
- tensor([-0.0199]),
- &#39;f2f4&#39;)</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[241]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">CNN</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[241]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>(tensor([0.0484, 0.0493, 0.0483, 0.0514, 0.0515, 0.0509, 0.0509, 0.0500, 0.0482,
-         0.0498, 0.0480, 0.0498, 0.0511, 0.0505, 0.0493, 0.0503, 0.0516, 0.0507,
-         0.0496, 0.0505], grad_fn=&lt;SoftmaxBackward0&gt;),
- tensor([-0.0199], grad_fn=&lt;TanhBackward0&gt;),
- &#39;h2h4&#39;)</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[163]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">progress</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [163]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">progress</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;progress&#39; is not defined</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[140]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span>    <span class="k">while</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>        
-        <span class="n">next_move</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_next_move</span><span class="p">()</span>
-        <span class="n">board</span><span class="o">.</span><span class="n">push_uci</span><span class="p">(</span><span class="n">next_move</span><span class="p">)</span>
-        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">next_move</span><span class="p">]</span>
-
-        <span class="n">repitition_count</span><span class="p">[</span><span class="n">tensor_to_tuple</span><span class="p">(</span><span class="n">board_mask</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">board_mask</span><span class="p">,</span> <span class="n">progress</span> <span class="o">=</span> <span class="n">update_board</span><span class="p">(</span><span class="n">board_mask</span><span class="p">,</span> <span class="n">next_move</span><span class="p">)</span>
-        <span class="n">update_stacks</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">repitition_count</span><span class="p">,</span> <span class="n">constant_stack</span><span class="p">,</span> <span class="n">white_stack</span><span class="p">,</span> <span class="n">black_stack</span><span class="p">,</span> <span class="n">progress</span><span class="p">)</span>
-    <span class="n">node</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">board</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [140]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">while</span> node<span style="color: rgb(98,98,98)">.</span>children <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:        
-<span class="ansi-green-intense-fg ansi-bold">      2</span>     next_move <span style="color: rgb(98,98,98)">=</span> node<span style="color: rgb(98,98,98)">.</span>get_next_move()
-<span class="ansi-green-fg">----&gt; 3</span>     <span class="ansi-yellow-bg">board</span><span style="color: rgb(98,98,98)">.</span>push_uci(next_move)
-<span class="ansi-green-intense-fg ansi-bold">      4</span>     node <span style="color: rgb(98,98,98)">=</span> node<span style="color: rgb(98,98,98)">.</span>children[next_move]
-<span class="ansi-green-intense-fg ansi-bold">      6</span>     repitition_count[tensor_to_tuple(board_mask)] <span style="color: rgb(98,98,98)">+</span><span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">1</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;board&#39; is not defined</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[26]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[623]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">500</span>
-<span class="n">num_simulations</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">num_simulations</span> <span class="o">=</span> <span class="mi">512</span>
+<span class="n">print_outcome</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">display_moves</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">validate_every</span> <span class="o">=</span> <span class="mi">3</span>
 </pre></div>
 
      </div>
 </div>
 </div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[624]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">training_loss</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">validation_accuracy</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+    <span class="c1">############## INITIALIZATION ############</span>
+
+    <span class="n">state</span> <span class="o">=</span> <span class="n">initialize_state</span><span class="p">()</span>
+
+    <span class="c1">############## SELECTION ############</span>
+    
+    <span class="n">level</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">root</span>
+    <span class="k">while</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">next_move</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_next_move</span><span class="p">()</span>
+        <span class="n">update_state</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">next_move</span><span class="p">)</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">next_move</span><span class="p">]</span>
+        <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">])</span>
+
+
+    <span class="c1">############## SIMULATION ############</span>
+
+    <span class="n">draws</span> <span class="o">=</span> <span class="n">white_wins</span> <span class="o">=</span> <span class="n">black_wins</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_simulations</span><span class="p">)):</span>
+            <span class="n">state_</span> <span class="o">=</span> <span class="n">copy_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">game_over</span><span class="p">(</span><span class="n">state_</span><span class="p">,</span> <span class="n">print_</span><span class="o">=</span><span class="n">print_outcome</span><span class="p">):</span>
+                <span class="n">next_move</span> <span class="o">=</span> <span class="n">CNN</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">state_</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">update_state</span><span class="p">(</span><span class="n">state_</span><span class="p">,</span> <span class="n">next_move</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">display_moves</span><span class="p">:</span>
+                    <span class="n">display</span><span class="p">(</span><span class="n">state_</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">state_</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_checkmate</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">state_</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]:</span>
+                <span class="n">white_wins</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">state_</span><span class="p">[</span><span class="s1">&#39;board&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_checkmate</span><span class="p">():</span>
+                <span class="n">black_wins</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">draws</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;White wins: </span><span class="si">{</span><span class="n">white_wins</span><span class="si">}</span><span class="se">\t</span><span class="s2">Black wins: </span><span class="si">{</span><span class="n">black_wins</span><span class="si">}</span><span class="se">\t</span><span class="s2">Draws: </span><span class="si">{</span><span class="n">draws</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">########### BACKUP ##################</span>
+    <span class="n">current_loss</span> <span class="o">=</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">expected_value_abs</span> <span class="o">=</span> <span class="p">(</span><span class="n">white_wins</span> <span class="o">-</span> <span class="n">black_wins</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">node</span> <span class="o">!=</span> <span class="n">root</span><span class="p">:</span>
+        <span class="n">previous_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">value_sum</span> <span class="o">+=</span> <span class="o">-</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]))</span><span class="o">*</span><span class="p">(</span><span class="n">expected_value_abs</span><span class="p">)</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">visit_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span>
+
+        <span class="n">pred</span><span class="p">,</span> <span class="n">pred_ev</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">CNN</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">true_dist</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_probability_distribution</span><span class="p">()</span>
+        <span class="n">true_ev</span> <span class="o">=</span> <span class="o">-</span><span class="n">node</span><span class="o">.</span><span class="n">get_expected_value</span><span class="p">()</span>
+
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">pred_ev</span><span class="p">,</span> <span class="n">true_dist</span><span class="p">,</span> <span class="n">true_ev</span><span class="p">)</span>
+    <span class="c1">#     torch.nn.utils.clip_grad_norm_(CNN.parameters(), 1)</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="n">current_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">node</span><span class="o">.</span><span class="n">value_sum</span> <span class="o">-=</span> <span class="n">expected_value_abs</span>
+    <span class="n">node</span><span class="o">.</span><span class="n">visit_count</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="n">training_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_loss</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">epoch</span> <span class="o">%</span> <span class="n">validate_every</span><span class="p">:</span>
+        <span class="n">validation_accuracy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">simulate_against_random_opponent</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;VALIDATION ACCURACY&quot;</span><span class="p">,</span> <span class="n">validation_accuracy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="se">\t\t</span><span class="s2">Level </span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="se">\t\t</span><span class="s2">Loss: </span><span class="si">{</span><span class="n">current_loss</span> <span class="o">/</span> <span class="n">n</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:13&lt;00:00,  2.02it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 13	Black wins: 5	Draws: 494
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 256/256 [03:13&lt;00:00,  1.33it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VALIDATION ACCURACY -0.02734375
+Epoch 0		Level 3		Loss: -0.004262362975471963
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:18&lt;00:00,  1.98it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 14	Black wins: 5	Draws: 493
+Epoch 1		Level 2		Loss: -0.004431779147125781
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [03:48&lt;00:00,  2.24it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 4	Black wins: 0	Draws: 508
+Epoch 2		Level 2		Loss: -0.004785597673617303
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:13&lt;00:00,  2.02it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 10	Black wins: 8	Draws: 494
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 256/256 [02:49&lt;00:00,  1.51it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VALIDATION ACCURACY -0.06640625
+Epoch 3		Level 2		Loss: -0.005760998465120792
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:30&lt;00:00,  1.89it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 5	Black wins: 5	Draws: 502
+Epoch 4		Level 2		Loss: -0.007416545995511115
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:28&lt;00:00,  1.91it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 12	Black wins: 4	Draws: 496
+Epoch 5		Level 2		Loss: -0.006201382027938962
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:28&lt;00:00,  1.91it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 12	Black wins: 9	Draws: 491
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 256/256 [02:53&lt;00:00,  1.48it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VALIDATION ACCURACY -0.0546875
+Epoch 6		Level 2		Loss: -0.006762102013453841
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:41&lt;00:00,  1.82it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 8	Black wins: 6	Draws: 498
+Epoch 7		Level 2		Loss: -0.0076126010389998555
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:28&lt;00:00,  1.91it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 2	Black wins: 3	Draws: 507
+Epoch 8		Level 2		Loss: -0.009087226819247007
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:37&lt;00:00,  1.84it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 3	Black wins: 2	Draws: 507
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 256/256 [02:53&lt;00:00,  1.48it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VALIDATION ACCURACY -0.05859375
+Epoch 9		Level 3		Loss: -0.01849603420123458
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:07&lt;00:00,  2.06it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 5	Black wins: 8	Draws: 499
+Epoch 10		Level 3		Loss: -0.020621549997789163
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:12&lt;00:00,  2.03it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 7	Black wins: 7	Draws: 498
+Epoch 11		Level 3		Loss: -0.02183656518658002
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:10&lt;00:00,  2.04it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 7	Black wins: 4	Draws: 501
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 256/256 [02:57&lt;00:00,  1.44it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VALIDATION ACCURACY -0.0546875
+Epoch 12		Level 3		Loss: -0.016759292222559452
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:44&lt;00:00,  1.80it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 9	Black wins: 3	Draws: 500
+Epoch 13		Level 2		Loss: -0.013297397992573678
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:04&lt;00:00,  2.09it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 10	Black wins: 5	Draws: 497
+Epoch 14		Level 2		Loss: -0.01298544998280704
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:41&lt;00:00,  1.82it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 3	Black wins: 9	Draws: 500
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 256/256 [03:15&lt;00:00,  1.31it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VALIDATION ACCURACY -0.05078125
+Epoch 15		Level 2		Loss: -0.013958289735455764
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:35&lt;00:00,  1.86it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 10	Black wins: 8	Draws: 494
+Epoch 16		Level 3		Loss: -0.02018355585945149
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:13&lt;00:00,  2.02it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 6	Black wins: 3	Draws: 503
+Epoch 17		Level 4		Loss: -0.0270628624712117
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:32&lt;00:00,  1.88it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 12	Black wins: 9	Draws: 491
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 256/256 [02:57&lt;00:00,  1.44it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VALIDATION ACCURACY -0.0546875
+Epoch 18		Level 4		Loss: -0.014980736479628831
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:45&lt;00:00,  1.79it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 6	Black wins: 4	Draws: 502
+Epoch 19		Level 2		Loss: -0.016795704141259193
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:13&lt;00:00,  2.02it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 13	Black wins: 6	Draws: 493
+Epoch 20		Level 2		Loss: -0.016166920075193048
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:33&lt;00:00,  1.87it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 14	Black wins: 12	Draws: 486
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 256/256 [03:03&lt;00:00,  1.39it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>VALIDATION ACCURACY -0.078125
+Epoch 21		Level 2		Loss: -0.01697792555205524
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [03:48&lt;00:00,  2.24it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 10	Black wins: 3	Draws: 499
+Epoch 22		Level 3		Loss: -0.011594026155459384
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|█████████████████████████| 512/512 [04:39&lt;00:00,  1.83it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>White wins: 11	Black wins: 10	Draws: 491
+Epoch 23		Level 4		Loss: -0.030529391719028354
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre> 39%|█████████▋               | 198/512 [01:34&lt;02:58,  1.76it/s]</pre>
+</div>
+</div>
+
+</div>
+
 </div>
 
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -15758,162 +16450,9 @@ Input <span class="ansi-green-fg">In [140]</span>, in <span class="ansi-cyan-fg"
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># for epoch in range(num_epochs):</span>
-<span class="c1">#     ################ INITIALIZATION ########</span>
-<span class="c1">#     board = chess.Board()</span>
-<span class="c1">#     node = root</span>
-
-<span class="c1">#     board_mask = torch.clone(start_board_mask)</span>
-<span class="c1">#     repitition_count = defaultdict(int)</span>
-<span class="c1">#     white_stack, black_stack = [board_mask], [flip_board(board_mask)]</span>
-
-
-<span class="c1">#     white = 1</span>
-<span class="c1">#     move_count = 1</span>
-<span class="c1">#     no_progress_count = 0</span>
-<span class="c1">#     repitition_count_current = 0</span>
-<span class="c1">#     p1_lc = p1_rc = p2_lc = p2_rc = 1</span>
-
-<span class="c1">#     constant_stack = [(move_count, white, no_progress_count, repitition_count_current, p1_lc, p1_rc, p2_lc, p2_rc)]</span>
-
-<span class="c1">#     ################ SELECTION #############</span>
-<span class="c1">#     while node.children is not None:        </span>
-<span class="c1">#         next_move = node.get_next_move()</span>
-<span class="c1">#         board.push_uci(next_move)</span>
-<span class="c1">#         node = node.children[next_move]</span>
-
-<span class="c1">#         repitition_count[tensor_to_tuple(board_mask)] += 1</span>
-<span class="c1">#         board_mask, progress = update_board(board_mask, next_move)</span>
-<span class="c1">#         update_stacks(board, repitition_count, constant_stack, white_stack, black_stack, progress)</span>
-<span class="c1">#     node.expand(board)</span>
-
-<span class="c1">#     ################ SIMULATION ############</span>
-<span class="c1">#     with torch.no_grad():</span>
-<span class="c1">#         draws = white_wins = black_wins = 0</span>
-<span class="c1">#         for _ in tqdm(range(num_simulations)):</span>
-<span class="c1">#             board_ = board.copy()</span>
-<span class="c1">#             board_mask_ = torch.clone(board_mask)</span>
-<span class="c1">#             repitition_count_ = repitition_count.copy()</span>
-
-<span class="c1">#             white_stack_ = white_stack[:]</span>
-<span class="c1">#             black_stack_ = black_stack[:]</span>
-<span class="c1">#             constant_stack_ = constant_stack[:]</span>
-
-<span class="c1">#             while not board_.is_checkmate() and not board_.is_stalemate() and not board_.is_insufficient_material() and not board_.can_claim_threefold_repetition():</span>
-<span class="c1">#                 stack = white_stack_ if constant_stack_[-1][1] else black_stack_</span>
-<span class="c1">#                 stack_slice = stack[-T:]</span>
-<span class="c1">#                 constant_params = constant_stack_[-1]</span>
-
-<span class="c1">#                 pred, _ = predict(stack_slice, constant_params, board_)</span>
-<span class="c1">#                 moves = list(map(lambda x: x.uci(), board_.legal_moves))</span>
-<span class="c1">#                 pred = Categorical(softmax(torch.stack(list(map(lambda x: pred[encode_from_uci(x, white=constant_params[1])], moves)), axis=0)))</span>
-<span class="c1">#                 next_move = moves[pred.sample()]</span>
-
-<span class="c1">#                 board_.push_uci(next_move)</span>
-<span class="c1">#                 board_mask_, progress = update_board(board_mask_, next_move)</span>
-<span class="c1">#                 update_stacks(board_, repitition_count_, constant_stack_, white_stack_, black_stack_, progress)</span>
-
-<span class="c1">#             if board_.is_checkmate() and not constant_stack_[-1][1]:</span>
-<span class="c1">#                 white_wins += 1</span>
-<span class="c1">#             elif board_.is_checkmate():</span>
-<span class="c1">#                 black_wins += 1</span>
-<span class="c1">#             else:</span>
-<span class="c1">#                 draws += 1</span>
-                
-<span class="c1">#     print(f&quot;White wins: {white_wins}\tBlack wins: {black_wins}\tDraws: {draws}&quot;)</span>
-
-<span class="c1">#     ############### BACKUP #################</span>
-<span class="c1">#     expected_value_add = (white_wins - black_wins)</span>
-<span class="c1">#     white_stack.pop()</span>
-<span class="c1">#     black_stack.pop()</span>
-<span class="c1">#     constant_stack.pop()</span>
-<span class="c1">#     color = constant_stack[-1][1]</span>
-
-
-<span class="c1">#     current_loss = n = 0</span>
-<span class="c1">#     while node != root:</span>
-<span class="c1">#         board.pop()</span>
-
-<span class="c1">#         node.value_sum += -(1-(2*color))*(expected_value_add)</span>
-<span class="c1">#         node.visit_count += num_simulations</span>
-
-<span class="c1">#         stack = white_stack if color else black_stack</span>
-<span class="c1">#         stack_slice = stack[-T:]</span>
-<span class="c1">#         constant_params = constant_stack[-1]</span>
-<span class="c1">#         pred, ev = predict(stack_slice, constant_params, board)</span>
-
-
-<span class="c1">#         moves = list(map(lambda x: x.uci(), board.legal_moves))</span>
-<span class="c1">#         pred = torch.stack(list(map(lambda x: pred[encode_from_uci(x, white=constant_params[1])], moves)), axis=0)</span>
-<span class="c1">#         true_dist, true_ev = node.parent.get_probability_distribution(), node.parent.get_expected_value()</span>
-
-<span class="c1">#         loss = criterion(pred, ev, true_dist, true_ev)</span>
-<span class="c1">#         loss.backward()</span>
-<span class="c1"># #         torch.nn.utils.clip_grad_norm_(CNN.parameters(), 1)</span>
-<span class="c1">#         optimizer.step()</span>
-
-<span class="c1">#         current_loss += loss.item()</span>
-<span class="c1">#         n += 1</span>
-
-<span class="c1">#         color = 1 - color</span>
-<span class="c1">#         node = node.parent</span>
-<span class="c1">#         white_stack.pop()</span>
-<span class="c1">#         black_stack.pop()</span>
-<span class="c1">#         constant_stack.pop()</span>
-<span class="c1">#     root.value_sum += -(1-(2*color))*(expected_value_add)</span>
-<span class="c1">#     root.visit_count += num_simulations</span>
-
-<span class="c1">#     print(f&quot;Epoch {epoch}\t\tLoss: {current_loss / n}&quot;)</span>
-
-<span class="c1"># ################ SAVING MODEL ##############</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[97]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;models&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">CNN</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;models/cnn.pt&quot;</span><span class="p">)</span>
 </pre></div>
 
      </div>
