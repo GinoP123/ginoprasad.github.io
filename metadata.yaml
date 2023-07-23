@@ -1,6 +1,10 @@
 CV: /Users/ginoprasad/_Receipts/pdf_files/Gino_Prasad_CV.pdf
 GitHub: https://github.com/GinoP123
 LinkedIn: https://www.linkedin.com/in/ginoprasad
+Publications:
+  - 
+    name: Identifying the core genome of the nucleus-forming bacteriophage family and characterization of Erwinia phage RAY
+    doi: https://doi.org/10.1016/j.celrep.2023.112432
 Projects:
 - /Users/ginoprasad/ai_stuff/chess_bot/mcst_alphazero.ipynb
 - /Users/ginoprasad/ai_stuff/Translation/transformer_seq_to_seq.ipynb
