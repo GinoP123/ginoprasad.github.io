@@ -43,37 +43,31 @@ for project_notebook_path in metadata['Projects'][:]:
         
 
 
-# In[6]:
-
-
-metadata
-
-
-# In[7]:
+# In[8]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
 
 
-# In[8]:
+# In[9]:
 
 
 max_base_filename_length = 50
 
 
-# In[9]:
+# In[10]:
 
 
 temp_path
 
 
-# In[10]:
+# In[11]:
 
 
 project_notebook_path
 
 
-# In[11]:
+# In[ ]:
 
 
 project_names, project_paths = [], []
@@ -113,46 +107,34 @@ for project_notebook_path in metadata['Projects']:
     print('\n')
 
 
-# In[12]:
+# In[ ]:
 
 
 index_html_path = 'index.html'
-
-
-# In[13]:
-
-
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[14]:
+# In[ ]:
 
 
-project_list_index_start = index_html_lines.index('\t\t<ul>\n') + 1
-project_list_index_end = index_html_lines.index('\t\t</ul>\n')
+publications_list_index_start = ["Publications" in x for x in index_html_lines].index(True) + 2
+publications_list_index_end = index_html_lines[publications_list_index_start:].index('\t\t</ul>\n') + publications_list_index_start
+
+publications_list = []
+for publication in metadata['Publications']:
+    name = publication['name']
+    publications_list.append(f'\t\t\t<li>\n\t\t\t\t<p>{name}<p>\n\t\t\t\t<br>\n\t\t\t\t&emsp;&emsp;<a href="{publication["doi"]}">{publication["doi"]}</a>\n\t\t\t</li>\n')
+index_html_lines = index_html_lines[:publications_list_index_start] + publications_list + index_html_lines[publications_list_index_end:]
 
 
 # In[ ]:
 
+
+project_list_index_start = ["Cool Projects" in x for x in index_html_lines].index(True) + 2
+project_list_index_end = index_html_lines[project_list_index_start:].index('\t\t</ul>\n') + project_list_index_start
 
 new_project_list =  [f'\t\t\t<li><a href="projects/{os.path.basename(html_path)}">{name}</a></li>\n' for name, html_path in zip(project_names, project_paths)]
-
-
-# In[ ]:
-
-
-new_project_list
-
-
-# In[ ]:
-
-
 index_html_lines = index_html_lines[:project_list_index_start] + new_project_list + index_html_lines[project_list_index_end:]
-
-
-# In[ ]:
-
-
 index_html_lines[project_list_index_start-2] = f"\t\t<h2> Cool Projects ({len(metadata['Projects'])}) </h2>\n"
 
 
@@ -162,12 +144,6 @@ index_html_lines[project_list_index_start-2] = f"\t\t<h2> Cool Projects ({len(me
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
-
-
-# In[ ]:
-
-
-index_html_lines
 
 
 # In[ ]:
