@@ -22,16 +22,11 @@ os.chdir('/Users/ginoprasad/ginoprasad.github.io')
 
 
 metadata_path = 'metadata.yaml'
-
-
-# In[4]:
-
-
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[5]:
+# In[4]:
 
 
 for project_notebook_path in metadata['Projects'][:]:
@@ -40,28 +35,27 @@ for project_notebook_path in metadata['Projects'][:]:
         metadata['Projects'].remove(project_notebook_path)
         with open(metadata_path, 'w') as outfile:
             yaml.dump(metadata, outfile, default_flow_style=False)
-        
 
 
-# In[8]:
+# In[5]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
 
 
-# In[9]:
+# In[6]:
 
 
 max_base_filename_length = 50
 
 
-# In[10]:
+# In[7]:
 
 
 temp_path
 
 
-# In[11]:
+# In[8]:
 
 
 project_notebook_path
@@ -123,7 +117,7 @@ publications_list_index_end = index_html_lines[publications_list_index_start:].i
 publications_list = []
 for publication in metadata['Publications']:
     name = publication['name']
-    publications_list.append(f'\t\t\t<li>\n\t\t\t\t<p>{name}<p>\n\t\t\t\t<br>\n\t\t\t\t&emsp;&emsp;<a href="{publication["doi"]}">{publication["doi"]}</a>\n\t\t\t</li>\n')
+    publications_list.append(f'\t\t\t<li>\n\t\t\t\t<p>{name}<p>\n\t\t\t\t<h3>&emsp;&emsp;{publication["journal"]}</h3>\n\t\t\t\t&emsp;&emsp;&emsp;&emsp;<a href="{publication["doi"]}">{publication["doi"]}</a>\n\t\t\t</li>\n')
 index_html_lines = index_html_lines[:publications_list_index_start] + publications_list + index_html_lines[publications_list_index_end:]
 
 
