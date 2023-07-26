@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[17]:
+# In[36]:
 
 
 import os
@@ -13,13 +13,13 @@ from tqdm import tqdm
 
 # # Convert notebooks to html
 
-# In[2]:
+# In[37]:
 
 
 os.chdir('/Users/ginoprasad/ginoprasad.github.io')
 
 
-# In[3]:
+# In[38]:
 
 
 metadata_path = 'metadata.yaml'
@@ -27,7 +27,7 @@ with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[4]:
+# In[39]:
 
 
 for project_notebook_path in metadata['Projects'][:]:
@@ -38,31 +38,31 @@ for project_notebook_path in metadata['Projects'][:]:
             yaml.dump(metadata, outfile, default_flow_style=False)
 
 
-# In[5]:
+# In[40]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
 
 
-# In[6]:
+# In[41]:
 
 
 max_base_filename_length = 50
 
 
-# In[7]:
+# In[42]:
 
 
 temp_path
 
 
-# In[8]:
+# In[43]:
 
 
 project_notebook_path
 
 
-# In[35]:
+# In[45]:
 
 
 project_names, project_paths = [], []
@@ -106,14 +106,14 @@ for project_notebook_path in tqdm(metadata['Projects']):
     print('\n')
 
 
-# In[10]:
+# In[46]:
 
 
 index_html_path = 'index.html'
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[11]:
+# In[47]:
 
 
 publications_list_index_start = ["Publications" in x for x in index_html_lines].index(True) + 2
@@ -126,7 +126,7 @@ for publication in metadata['Publications']:
 index_html_lines = index_html_lines[:publications_list_index_start] + publications_list + index_html_lines[publications_list_index_end:]
 
 
-# In[12]:
+# In[48]:
 
 
 project_list_index_start = ["Cool Projects" in x for x in index_html_lines].index(True) + 2
@@ -139,20 +139,20 @@ index_html_lines[project_list_index_start-2] = f"\t\t<h2> Cool Projects ({len(me
 
 # # Copying CV and Updating Links
 
-# In[13]:
+# In[49]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[14]:
+# In[50]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub']}
 tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 
 
-# In[15]:
+# In[51]:
 
 
 for i, line in enumerate(index_html_lines):
@@ -170,14 +170,14 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[16]:
+# In[52]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
 
 
-# In[17]:
+# In[53]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -185,7 +185,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[18]:
+# In[54]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):

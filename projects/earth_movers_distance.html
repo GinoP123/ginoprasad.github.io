@@ -14615,7 +14615,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Query: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">similarity</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">similarity_scores</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Similarity Match: </span><span class="si">{</span><span class="n">similarity</span><span class="si">}</span><span class="se">\t</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Earth Mover&#39;s Distance: </span><span class="si">{</span><span class="n">similarity</span><span class="si">}</span><span class="se">\t</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14638,9 +14638,9 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>Query: What food should I buy tomorrow for dinner
-Similarity Match: 3.1012875219130516	Book of groceries that everyone should purchase
-Similarity Match: 3.286581309950352	Dinner recipes for clam chowder with a soup base
-Similarity Match: 3.4387479479813576	Guide to cooking with Garam Masala for lunch
+Earth Mover&#39;s Distance: 3.1012875219130516	Book of groceries that everyone should purchase
+Earth Mover&#39;s Distance: 3.286581309950352	Dinner recipes for clam chowder with a soup base
+Earth Mover&#39;s Distance: 3.4387479479813576	Guide to cooking with Garam Masala for lunch
 </pre>
 </div>
 </div>
@@ -15082,7 +15082,7 @@ Similarity Match: 3.4387479479813576	Guide to cooking with Garam Masala for lunc
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Query: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">similarity</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">similarity_scores</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Similarity Match: </span><span class="si">{</span><span class="n">similarity</span><span class="si">}</span><span class="se">\t</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Earth Mover&#39;s Distance: </span><span class="si">{</span><span class="n">similarity</span><span class="si">}</span><span class="se">\t</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -15105,15 +15105,31 @@ Similarity Match: 3.4387479479813576	Guide to cooking with Garam Masala for lunc
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>Query: What food should I buy tomorrow for dinner
-Similarity Match: 3.1012875219130516	Book of groceries that everyone should purchase
-Similarity Match: 3.286581309950352	Dinner recipes for clam chowder with a soup base
-Similarity Match: 3.4387479479813576	Guide to cooking with Garam Masala for lunch
+Earth Mover&#39;s Distance: 3.1012875219130516	Book of groceries that everyone should purchase
+Earth Mover&#39;s Distance: 3.286581309950352	Dinner recipes for clam chowder with a soup base
+Earth Mover&#39;s Distance: 3.4387479479813576	Guide to cooking with Garam Masala for lunch
 </pre>
 </div>
 </div>
 
 </div>
 
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+     </div>
+</div>
+</div>
 </div>
 
 </div>
