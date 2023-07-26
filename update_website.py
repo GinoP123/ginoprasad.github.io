@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[36]:
+# In[1]:
 
 
 import os
@@ -13,13 +13,13 @@ from tqdm import tqdm
 
 # # Convert notebooks to html
 
-# In[37]:
+# In[2]:
 
 
 os.chdir('/Users/ginoprasad/ginoprasad.github.io')
 
 
-# In[38]:
+# In[3]:
 
 
 metadata_path = 'metadata.yaml'
@@ -27,7 +27,7 @@ with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[39]:
+# In[4]:
 
 
 for project_notebook_path in metadata['Projects'][:]:
@@ -38,31 +38,31 @@ for project_notebook_path in metadata['Projects'][:]:
             yaml.dump(metadata, outfile, default_flow_style=False)
 
 
-# In[40]:
+# In[5]:
 
 
 temp_path = f'{os.getcwd()}/projects/temp.html'
 
 
-# In[41]:
+# In[6]:
 
 
 max_base_filename_length = 50
 
 
-# In[42]:
+# In[7]:
 
 
 temp_path
 
 
-# In[43]:
+# In[8]:
 
 
 project_notebook_path
 
 
-# In[45]:
+# In[9]:
 
 
 project_names, project_paths = [], []
@@ -78,6 +78,10 @@ for project_notebook_path in tqdm(metadata['Projects']):
         print(f"\n\n\n\n\tWarning: Project '{project_name}' Name exceeds recommended length\n\n\n\n")
         project_base_path = project_name
     project_path = f'{os.getcwd()}/projects/{project_base_path}.html'
+    
+    assert project_path not in project_paths
+    project_names.append(project_name)
+    project_paths.append(project_path)
     
     if os.path.getmtime(project_path) > os.path.getmtime(project_notebook_path):
         continue
@@ -97,23 +101,19 @@ for project_notebook_path in tqdm(metadata['Projects']):
     with open(temp_path, 'w') as outfile:
         lines.insert(5, '<link rel="icon" href="../docs/assets/logo.png"><iframe src="../header.html" style="height: 12rem; width: 100%" frameborder="0" scrolling="no"></iframe>\n')
         outfile.write(''.join(lines))
-    
-    assert project_path not in project_paths
     os.rename(temp_path, project_path)
     
-    project_names.append(project_name)
-    project_paths.append(project_path)
     print('\n')
 
 
-# In[46]:
+# In[10]:
 
 
 index_html_path = 'index.html'
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[47]:
+# In[11]:
 
 
 publications_list_index_start = ["Publications" in x for x in index_html_lines].index(True) + 2
@@ -126,7 +126,7 @@ for publication in metadata['Publications']:
 index_html_lines = index_html_lines[:publications_list_index_start] + publications_list + index_html_lines[publications_list_index_end:]
 
 
-# In[48]:
+# In[12]:
 
 
 project_list_index_start = ["Cool Projects" in x for x in index_html_lines].index(True) + 2
@@ -139,20 +139,20 @@ index_html_lines[project_list_index_start-2] = f"\t\t<h2> Cool Projects ({len(me
 
 # # Copying CV and Updating Links
 
-# In[49]:
+# In[13]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[50]:
+# In[14]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub']}
 tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 
 
-# In[51]:
+# In[15]:
 
 
 for i, line in enumerate(index_html_lines):
@@ -170,14 +170,14 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[52]:
+# In[16]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
 
 
-# In[53]:
+# In[17]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -185,7 +185,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[54]:
+# In[18]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
