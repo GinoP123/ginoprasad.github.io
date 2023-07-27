@@ -69,7 +69,10 @@ project_names, project_paths = [], []
 for project_notebook_path in tqdm(metadata['Projects']):
     title_line = sp.run(f"head -n 200 '{project_notebook_path}'", shell=True, capture_output=True).stdout.decode().split('\n')
     title_line = title_line[title_line.index('   "source": [') + 1]
-    project_name = title_line.strip().lstrip('"# ').rstrip('\\n",').strip()
+    project_name = title_line.strip().lstrip('"# ').replace('"', '')
+    if project_name[-3:] == '\\n,':
+        project_name = project_name[:-3]
+    project_name = project_name.strip()
     
     project_base_path = os.path.basename(project_notebook_path)[:-len('.ipynb')]
     while len(project_base_path) > max_base_filename_length:
@@ -109,11 +112,17 @@ for project_notebook_path in tqdm(metadata['Projects']):
 # In[10]:
 
 
+project_names
+
+
+# In[11]:
+
+
 index_html_path = 'index.html'
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[11]:
+# In[12]:
 
 
 publications_list_index_start = ["Publications" in x for x in index_html_lines].index(True) + 2
@@ -126,7 +135,7 @@ for publication in metadata['Publications']:
 index_html_lines = index_html_lines[:publications_list_index_start] + publications_list + index_html_lines[publications_list_index_end:]
 
 
-# In[12]:
+# In[13]:
 
 
 project_list_index_start = ["Cool Projects" in x for x in index_html_lines].index(True) + 2
@@ -139,20 +148,20 @@ index_html_lines[project_list_index_start-2] = f"\t\t<h2> Cool Projects ({len(me
 
 # # Copying CV and Updating Links
 
-# In[13]:
+# In[14]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[14]:
+# In[15]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub']}
 tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 
 
-# In[15]:
+# In[16]:
 
 
 for i, line in enumerate(index_html_lines):
@@ -170,14 +179,14 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[16]:
+# In[17]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
 
 
-# In[17]:
+# In[18]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -185,7 +194,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[18]:
+# In[19]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
