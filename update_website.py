@@ -53,18 +53,6 @@ max_base_filename_length = 50
 # In[7]:
 
 
-temp_path
-
-
-# In[8]:
-
-
-project_notebook_path
-
-
-# In[9]:
-
-
 project_names, project_paths = [], []
 for project_notebook_path in tqdm(metadata['Projects']):
     title_line = sp.run(f"head -n 200 '{project_notebook_path}'", shell=True, capture_output=True).stdout.decode().split('\n')
@@ -109,33 +97,33 @@ for project_notebook_path in tqdm(metadata['Projects']):
     print('\n')
 
 
-# In[10]:
+# In[8]:
 
 
 project_names
 
 
-# In[11]:
+# In[9]:
 
 
 index_html_path = 'index.html'
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[12]:
+# In[10]:
 
 
-publications_list_index_start = ["Publications" in x for x in index_html_lines].index(True) + 2
-publications_list_index_end = index_html_lines[publications_list_index_start:].index('\t\t</ul>\n') + publications_list_index_start
+# publications_list_index_start = ["Publications" in x for x in index_html_lines].index(True) + 2
+# publications_list_index_end = index_html_lines[publications_list_index_start:].index('\t\t</ul>\n') + publications_list_index_start
 
-publications_list = []
-for publication in metadata['Publications']:
-    name = publication['name']
-    publications_list.append(f'\t\t\t<li>\n\t\t\t\t<p>{name}<p>\n\t\t\t\t<h3>&emsp;&emsp;{publication["journal"]}</h3>\n\t\t\t\t&emsp;&emsp;&emsp;&emsp;<a href="{publication["doi"]}">{publication["doi"]}</a>\n\t\t\t</li>\n')
-index_html_lines = index_html_lines[:publications_list_index_start] + publications_list + index_html_lines[publications_list_index_end:]
+# publications_list = []
+# for publication in metadata['Publications']:
+#     name = publication['name']
+#     publications_list.append(f'\t\t\t<li>\n\t\t\t\t<p>{name}<p>\n\t\t\t\t<h3>&emsp;&emsp;{publication["journal"]}</h3>\n\t\t\t\t&emsp;&emsp;&emsp;&emsp;<a href="{publication["doi"]}">{publication["doi"]}</a>\n\t\t\t</li>\n')
+# index_html_lines = index_html_lines[:publications_list_index_start] + publications_list + index_html_lines[publications_list_index_end:]
 
 
-# In[13]:
+# In[11]:
 
 
 project_list_index_start = ["Cool Projects" in x for x in index_html_lines].index(True) + 2
@@ -148,20 +136,20 @@ index_html_lines[project_list_index_start-2] = f"\t\t<h2> Cool Projects ({len(me
 
 # # Copying CV and Updating Links
 
-# In[14]:
+# In[12]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[15]:
+# In[13]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub']}
 tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 
 
-# In[16]:
+# In[14]:
 
 
 for i, line in enumerate(index_html_lines):
@@ -179,14 +167,14 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[17]:
+# In[15]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
 
 
-# In[18]:
+# In[16]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -194,7 +182,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[19]:
+# In[20]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
