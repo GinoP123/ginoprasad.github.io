@@ -1,5 +1,10 @@
 .index {
-	margin-left: 2rem;
+	margin-left: 3rem;
+}
+
+.profile_picture {
+	display: flex;
+	justify-content: center;
 }
 
 .name {
