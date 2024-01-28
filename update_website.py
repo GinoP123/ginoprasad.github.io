@@ -10,6 +10,7 @@ import yaml
 import shutil
 from tqdm import tqdm
 import numpy as np
+import datetime
 import re
 
 
@@ -62,12 +63,18 @@ def get_notebook_metadata(project_notebook_path):
     notebook_metadata = {}
     notebook_metadata['title'] = re.search('(?<=# ).*?(?<=\\\\n)', notebook_metadata_str).group(0)[:-2]
     notebook_metadata['authors'] = re.search('(?<=#### ).*?(?<=\\\\n)', notebook_metadata_str).group(0)[:-2]
-    notebook_metadata['date'] = re.search('[0-9][0-9]/[0-9][0-9]/[0-9][0-9]', notebook_metadata_str).group(0)
+    notebook_metadata['date'] = re.search('[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]', notebook_metadata_str).group(0)
     
     return notebook_metadata
 
 
 # In[8]:
+
+
+datetime.datetime.now().strftime('%D')
+
+
+# In[9]:
 
 
 project_names, project_paths, project_dates = [], [], []
@@ -109,15 +116,19 @@ for project_notebook_path in tqdm(metadata['Projects']):
     
     print('\n')
 
+datetimes = [datetime.datetime.strptime(project_date, '%m/%d/%Y') for project_date in project_dates]
+sort_list = lambda ls: [y[1] for y in sorted(enumerate(ls), key=lambda x: datetimes[x[0]], reverse=True)]
+project_names, project_paths, project_dates = map(sort_list, (project_names, project_paths, project_dates))
 
-# In[9]:
+
+# In[10]:
 
 
 index_html_path = 'index.html'
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[15]:
+# In[11]:
 
 
 project_template = "\t\t\t<li><div class=link><a href=\"{}\">{}</a></div><div class='date'><img src='docs/assets/calendar_icon.png'><span class=date>{}</span></div></li>\n"
@@ -132,20 +143,20 @@ index_html_lines[project_list_index_start-2] = f"\t\t<h2> Cool Projects ({len(me
 
 # # Copying CV and Updating Links
 
-# In[16]:
+# In[12]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[17]:
+# In[13]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub']}
 tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 
 
-# In[18]:
+# In[14]:
 
 
 for i, line in enumerate(index_html_lines):
@@ -163,14 +174,14 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[19]:
+# In[15]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
 
 
-# In[20]:
+# In[16]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -178,7 +189,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[21]:
+# In[17]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
