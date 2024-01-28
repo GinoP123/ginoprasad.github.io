@@ -131,7 +131,7 @@ index_html_lines = open(index_html_path).readlines()
 # In[11]:
 
 
-project_template = "\t\t\t<li><div class=link><a href=\"{}\">{}</a></div><div class='date'><img src='docs/assets/calendar_icon.png'><span class=date>{}</span></div></li>\n"
+project_template = "\t\t\t<li><div class=link><a href=\"projects/{}\">{}</a></div><div class='date'><img src='docs/assets/calendar_icon.png'><span class=date>{}</span></div></li>\n"
 
 project_list_index_start = ["Cool Projects" in x for x in index_html_lines].index(True) + 2
 project_list_index_end = index_html_lines[project_list_index_start:].index('\t\t</ul>\n') + project_list_index_start
