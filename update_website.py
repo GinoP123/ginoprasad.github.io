@@ -9,6 +9,8 @@ import subprocess as sp
 import yaml
 import shutil
 from tqdm import tqdm
+import numpy as np
+import re
 
 
 # # Convert notebooks to html
@@ -53,34 +55,45 @@ max_base_filename_length = 50
 # In[7]:
 
 
-project_names, project_paths = [], []
-for project_notebook_path in tqdm(metadata['Projects']):
-    title_line = sp.run(f"head -n 200 '{project_notebook_path}'", shell=True, capture_output=True).stdout.decode().split('\n')
-    title_line = title_line[title_line.index('   "source": [') + 1]
-    project_name = title_line.strip().lstrip('"# ').replace('"', '')
-    if project_name[-3:] == '\\n,':
-        project_name = project_name[:-3]
-    project_name = project_name.strip()
+def get_notebook_metadata(project_notebook_path):
+    notebook_metadata_str = sp.run(f"head -n 200 '{project_notebook_path}'", shell=True, capture_output=True).stdout.decode().split('\n')
+    notebook_metadata_str = ''.join(notebook_metadata_str[notebook_metadata_str.index('   "source": [')+1:notebook_metadata_str.index('   ]')])
     
+    notebook_metadata = {}
+    notebook_metadata['title'] = re.search('(?<=# ).*?(?<=\\\\n)', notebook_metadata_str).group(0)[:-2]
+    notebook_metadata['authors'] = re.search('(?<=#### ).*?(?<=\\\\n)', notebook_metadata_str).group(0)[:-2]
+    notebook_metadata['date'] = re.search('[0-9][0-9]/[0-9][0-9]/[0-9][0-9]', notebook_metadata_str).group(0)
+    
+    return notebook_metadata
+
+
+# In[8]:
+
+
+project_names, project_paths, project_dates = [], [], []
+for project_notebook_path in tqdm(metadata['Projects']):
+    notebook_metadata = get_notebook_metadata(project_notebook_path)    
     project_base_path = os.path.basename(project_notebook_path)[:-len('.ipynb')]
+
     while len(project_base_path) > max_base_filename_length:
         project_base_path = ' '.join(project_base_path.split(' ')[:-1])
     if not project_base_path:
-        print(f"\n\n\n\n\tWarning: Project '{project_name}' Name exceeds recommended length\n\n\n\n")
-        project_base_path = project_name
-    project_path = f'{os.getcwd()}/projects/{project_base_path}.html'
+        print(f"\n\n\n\n\tWarning: Project '{notebook_metadata['title']}' Name exceeds recommended length\n\n\n\n")
+        project_base_path = notebook_metadata['title']
+    notebook_metadata['project_path'] = f'{os.getcwd()}/projects/{project_base_path}.html'
     
-    assert project_path not in project_paths
-    project_names.append(project_name)
-    project_paths.append(project_path)
+    assert notebook_metadata['project_path'] not in project_paths
+    project_names.append(notebook_metadata['title'])
+    project_paths.append(notebook_metadata['project_path'])
+    project_dates.append(notebook_metadata['date'])
     
-    if os.path.getmtime(project_path) > os.path.getmtime(project_notebook_path):
+    if os.path.exists(notebook_metadata['project_path']) and os.path.getmtime(notebook_metadata['project_path']) > os.path.getmtime(project_notebook_path):
         continue
     
     print(project_base_path)
     print(f"Converting {project_notebook_path}")
     sp.run(f"jupyter nbconvert --to html '{project_notebook_path}' --output '{temp_path}'", shell=True)
-    print(f'Project Name: {project_name}')
+    print(f"Project Name: {notebook_metadata['title']}")
 
     with open(temp_path) as infile:
         lines = infile.readlines()
@@ -92,15 +105,9 @@ for project_notebook_path in tqdm(metadata['Projects']):
     with open(temp_path, 'w') as outfile:
         lines.insert(5, '<link rel="icon" href="../docs/assets/logo.png"><iframe src="../header.html" style="height: 12rem; width: 100%" frameborder="0" scrolling="no"></iframe>\n')
         outfile.write(''.join(lines))
-    os.rename(temp_path, project_path)
+    os.rename(temp_path, notebook_metadata['project_path'])
     
     print('\n')
-
-
-# In[8]:
-
-
-project_names
 
 
 # In[9]:
@@ -110,46 +117,35 @@ index_html_path = 'index.html'
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[10]:
+# In[15]:
 
 
-# publications_list_index_start = ["Publications" in x for x in index_html_lines].index(True) + 2
-# publications_list_index_end = index_html_lines[publications_list_index_start:].index('\t\t</ul>\n') + publications_list_index_start
-
-# publications_list = []
-# for publication in metadata['Publications']:
-#     name = publication['name']
-#     publications_list.append(f'\t\t\t<li>\n\t\t\t\t<p>{name}<p>\n\t\t\t\t<h3>&emsp;&emsp;{publication["journal"]}</h3>\n\t\t\t\t&emsp;&emsp;&emsp;&emsp;<a href="{publication["doi"]}">{publication["doi"]}</a>\n\t\t\t</li>\n')
-# index_html_lines = index_html_lines[:publications_list_index_start] + publications_list + index_html_lines[publications_list_index_end:]
-
-
-# In[11]:
-
+project_template = "\t\t\t<li><div class=link><a href=\"{}\">{}</a></div><div class='date'><img src='docs/assets/calendar_icon.png'><span class=date>{}</span></div></li>\n"
 
 project_list_index_start = ["Cool Projects" in x for x in index_html_lines].index(True) + 2
 project_list_index_end = index_html_lines[project_list_index_start:].index('\t\t</ul>\n') + project_list_index_start
 
-new_project_list =  [f'\t\t\t<li><a href="projects/{os.path.basename(html_path)}">{name}</a></li>\n' for name, html_path in zip(project_names, project_paths)]
+new_project_list =  [project_template.format(os.path.basename(html_path), name, date) for name, html_path, date in zip(project_names, project_paths, project_dates)]
 index_html_lines = index_html_lines[:project_list_index_start] + new_project_list + index_html_lines[project_list_index_end:]
 index_html_lines[project_list_index_start-2] = f"\t\t<h2> Cool Projects ({len(metadata['Projects'])}) </h2>\n"
 
 
 # # Copying CV and Updating Links
 
-# In[12]:
+# In[16]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[13]:
+# In[17]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub']}
 tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 
 
-# In[14]:
+# In[18]:
 
 
 for i, line in enumerate(index_html_lines):
@@ -167,14 +163,14 @@ for i, line in enumerate(index_html_lines):
 
 # # Writing Updated Index File
 
-# In[15]:
+# In[19]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
 
 
-# In[16]:
+# In[20]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -182,7 +178,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[17]:
+# In[21]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
