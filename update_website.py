@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[13]:
 
 
 import os
+import glob
 import subprocess as sp
 import yaml
 import shutil
@@ -71,12 +72,6 @@ def get_notebook_metadata(project_notebook_path):
 # In[8]:
 
 
-datetime.datetime.now().strftime('%D')
-
-
-# In[9]:
-
-
 project_names, project_paths, project_dates = [], [], []
 for project_notebook_path in tqdm(metadata['Projects']):
     notebook_metadata = get_notebook_metadata(project_notebook_path)    
@@ -121,14 +116,26 @@ sort_list = lambda ls: [y[1] for y in sorted(enumerate(ls), key=lambda x: dateti
 project_names, project_paths, project_dates = map(sort_list, (project_names, project_paths, project_dates))
 
 
-# In[10]:
+# In[15]:
+
+
+glob.glob(f'{os.getcwd()}/projects/*')
+
+
+# In[9]:
+
+
+project_paths
+
+
+# In[9]:
 
 
 index_html_path = 'index.html'
 index_html_lines = open(index_html_path).readlines()
 
 
-# In[11]:
+# In[10]:
 
 
 project_template = "\t\t\t<li><div class=link><a href=\"projects/{}\">{}</a></div><div class='date'><img src='docs/assets/calendar_icon.png'><span class=date>{}</span></div></li>\n"
@@ -143,7 +150,7 @@ index_html_lines[project_list_index_start-2] = f"\t\t<h2> Cool Projects ({len(me
 
 # # Copying CV and Updating Links
 
-# In[12]:
+# In[11]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
@@ -189,7 +196,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[17]:
+# In[18]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
