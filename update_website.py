@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[13]:
+# In[1]:
 
 
 import os
@@ -21,12 +21,16 @@ import re
 
 
 os.chdir('/Users/ginoprasad/ginoprasad.github.io')
-
-
-# In[3]:
-
-
+index_html_path = 'index.html'
+header_html_path = 'header.html'
 metadata_path = 'metadata.yaml'
+temp_path = f'{os.getcwd()}/projects/temp.html'
+max_base_filename_length = 50
+
+
+# In[78]:
+
+
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
@@ -40,18 +44,6 @@ for project_notebook_path in metadata['Projects'][:]:
         metadata['Projects'].remove(project_notebook_path)
         with open(metadata_path, 'w') as outfile:
             yaml.dump(metadata, outfile, default_flow_style=False)
-
-
-# In[5]:
-
-
-temp_path = f'{os.getcwd()}/projects/temp.html'
-
-
-# In[6]:
-
-
-max_base_filename_length = 50
 
 
 # In[7]:
@@ -114,28 +106,18 @@ for project_notebook_path in tqdm(metadata['Projects']):
 datetimes = [datetime.datetime.strptime(project_date, '%m/%d/%Y') for project_date in project_dates]
 sort_list = lambda ls: [y[1] for y in sorted(enumerate(ls), key=lambda x: datetimes[x[0]], reverse=True)]
 project_names, project_paths, project_dates = map(sort_list, (project_names, project_paths, project_dates))
+[os.remove(x) for x in glob.glob(f'{os.getcwd()}/projects/*') if x not in project_paths]
+None
 
 
-# In[15]:
+# In[91]:
 
 
-glob.glob(f'{os.getcwd()}/projects/*')
+with open(index_html_path) as infile:
+    index_html_lines = infile.readlines()
 
 
-# In[9]:
-
-
-project_paths
-
-
-# In[9]:
-
-
-index_html_path = 'index.html'
-index_html_lines = open(index_html_path).readlines()
-
-
-# In[10]:
+# In[87]:
 
 
 project_template = "\t\t\t<li><div class=link><a href=\"projects/{}\">{}</a></div><div class='date'><img src='docs/assets/calendar_icon.png'><span class=date>{}</span></div></li>\n"
@@ -145,50 +127,56 @@ project_list_index_end = index_html_lines[project_list_index_start:].index('\t\t
 
 new_project_list =  [project_template.format(os.path.basename(html_path), name, date) for name, html_path, date in zip(project_names, project_paths, project_dates)]
 index_html_lines = index_html_lines[:project_list_index_start] + new_project_list + index_html_lines[project_list_index_end:]
-index_html_lines[project_list_index_start-2] = f"\t\t<h2> Cool Projects ({len(metadata['Projects'])}) </h2>\n"
+index_html_lines[project_list_index_start-2] = re.sub("(?<=\\().*?(?=\\))",  str(len(metadata['Projects'])), index_html_lines[project_list_index_start-2])
 
 
-# # Copying CV and Updating Links
-
-# In[11]:
-
-
-assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
-
-
-# In[13]:
-
-
-tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub']}
-tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
-
-
-# In[14]:
-
-
-for i, line in enumerate(index_html_lines):
-    for tag in tag_dict:
-        prefix = f"<a id='{tag}' href='"
-        if line.startswith(prefix):
-            print(line.strip())
-            new_line = prefix + tag_dict[tag] + line[len(prefix) + line[len(prefix):].index("'"):]
-            print(new_line)
-            index_html_lines[i] = new_line
-    
-    if line.startswith(prefix):
-        del tag_dict[tag]
-
-
-# # Writing Updated Index File
-
-# In[15]:
+# In[66]:
 
 
 with open(index_html_path, 'w') as outfile:
     outfile.write(''.join(index_html_lines))
 
 
-# In[16]:
+# # Copying CV and Updating Links
+
+# In[79]:
+
+
+assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
+
+
+# In[80]:
+
+
+tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub', 'GoogleScholar', 'ORCID']}
+tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
+tag_dict['Logo'] = metadata['DomainLink']
+
+
+# In[81]:
+
+
+with open("header.html") as infile:
+    header_html_string = infile.read()
+
+
+# In[82]:
+
+
+for tag_name, tag_value in tag_dict.items():
+    header_html_string = re.sub(f"(?<=<a id='{tag_name}' href=').*?(?='>)", tag_value, header_html_string)
+
+
+# In[83]:
+
+
+with open("header.html", 'w') as outfile:
+    outfile.write(header_html_string)
+
+
+# # Writing Updated Index File
+
+# In[17]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -196,7 +184,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[18]:
+# In[16]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
