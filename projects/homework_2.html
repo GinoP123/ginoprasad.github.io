@@ -14603,7 +14603,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[22]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -14613,6 +14613,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 <span class="kn">from</span> <span class="nn">scipy.stats.distributions</span> <span class="kn">import</span> <span class="n">chi2</span>
+<span class="kn">import</span> <span class="nn">skimage</span>
 </pre></div>
 
      </div>
@@ -14625,7 +14626,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;txt_files/pop2.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">infile</span><span class="p">:</span>
@@ -14642,7 +14643,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">msms_params</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;(?=ms).*?(?=</span><span class="se">\\\n</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">pop2</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -14662,7 +14663,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">column_1_index</span> <span class="o">=</span> <span class="mi">100</span>
@@ -14679,12 +14680,11 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[26]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">D_prime_matrix</span> <span class="o">=</span> <span class="p">[]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">D_prime_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">snp_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">snp_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 <span class="k">for</span> <span class="n">column_1_index</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">snp_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
-    <span class="n">D_prime_matrix</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
     <span class="k">for</span> <span class="n">column_2_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">snp_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
         <span class="n">column_1</span> <span class="o">=</span> <span class="n">snp_matrix</span><span class="p">[:,</span><span class="n">column_1_index</span><span class="p">]</span>
         <span class="n">column_2</span> <span class="o">=</span> <span class="n">snp_matrix</span><span class="p">[:,</span><span class="n">column_2_index</span><span class="p">]</span>
@@ -14698,8 +14698,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
             <span class="n">D_max</span> <span class="o">=</span> <span class="nb">min</span><span class="p">((</span><span class="o">~</span><span class="n">column_1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="o">~</span><span class="n">column_2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="p">(</span><span class="n">column_1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">column_2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
         <span class="n">D_max</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">snp_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">D_prime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">/</span> <span class="n">D_max</span>
-        <span class="n">D_prime_matrix</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">D_prime</span><span class="p">)</span>
-<span class="n">D_prime_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">D_prime_matrix</span><span class="p">)</span>
+        <span class="n">D_prime_matrix</span><span class="p">[</span><span class="n">column_1_index</span><span class="p">,</span> <span class="n">column_2_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">D_prime</span>
 </pre></div>
 
      </div>
@@ -14721,7 +14720,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████████████████████████████████████████████████████████████████████████████████████████| 2718/2718 [01:16&lt;00:00, 35.36it/s]
+<pre>100%|███████████████████████| 2718/2718 [02:06&lt;00:00, 21.55it/s]
 </pre>
 </div>
 </div>
@@ -14735,12 +14734,14 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[27]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 <span class="c1"># ax.tick_params(top=True, bottom=False, labelbottom=False)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">D_prime_matrix</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;fig_1.jpg&quot;</span><span class="p">)</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">skimage</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;fig_1.jpg&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
 <span class="c1"># ax.set_yticks(range(0, snp_matrix.shape[1], 500))</span>
 </pre></div>
@@ -14760,13 +14761,13 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[27]:</div>
 
 
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>&lt;matplotlib.colorbar.Colorbar at 0x291405df0&gt;</pre>
+<pre>&lt;matplotlib.colorbar.Colorbar at 0x16c168d30&gt;</pre>
 </div>
 
 </div>
@@ -15441,19 +15442,8 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Chromosome 22 is 51 million bp long, so $\frac{1103547}{51 \times 10^6}\times 1000 \approx 21.64 $ per 1000bp</p>
+<p>The first SNP is recorded at position 16050075, and the last SNP in the file is recorded at position 51244237, so $\frac{1103547}{51244237 - 16050075}\times 1000 \approx 31.36 $ per 1000bp</p>
 
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="TODO-divide-bt-max-position">TODO divide bt max position<a class="anchor-link" href="#TODO-divide-bt-max-position">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -15475,7 +15465,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The number of sites per 1000bp seems extremely high. From the lecture 1 notes, there is around 1 mutation per 1000 bp in humans. However, the 21.64bp figure more than 20 times higher, which is surprising.</p>
+<p>The number of sites per 1000bp seems extremely high. From the lecture 1 notes, there is around 1 mutation per 1000 bp in humans. However, the 31.36bp figure is more than 30 times higher, which is surprising.</p>
 
 </div>
 </div>
@@ -15515,85 +15505,6 @@ jp-needs-light-background
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[74]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>head -n <span class="m">5</span> <span class="s1">&#39;/Users/ginoprasad/_School/CSE_280A/homework/homework_2/vcf_files/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf&#39;</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>  5%|█                   | 1/20 [3:19:46&lt;63:15:43, 11986.48s/it]
-  1%|▏                       | 1/100 [05:15&lt;8:39:51, 315.07s/it]
-  0%|                                    | 0/20 [03:16&lt;?, ?it/s]
- 85%|██████████████████████▉    | 17/20 [02:17&lt;00:24,  8.10s/it]
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">OSError</span>                                   Traceback (most recent call last)
-Input <span class="ansi-green-fg">In [74]</span>, in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">get_ipython</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">system</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">head -n 5 </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">/Users/ginoprasad/_School/CSE_280A/homework/homework_2/vcf_files/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span>
-
-File <span class="ansi-green-fg">~/miniconda3/envs/torch-gpu/lib/python3.9/site-packages/ipykernel/zmqshell.py:636</span>, in <span class="ansi-cyan-fg">ZMQInteractiveShell.system_piped</span><span class="ansi-blue-fg">(self, cmd)</span>
-<span class="ansi-green-intense-fg ansi-bold">    634</span>         <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>user_ns[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">_exit_code</span><span style="color: rgb(175,0,0)">&#39;</span>] <span style="color: rgb(98,98,98)">=</span> system(cmd)
-<span class="ansi-green-intense-fg ansi-bold">    635</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
-<span class="ansi-green-fg">--&gt; 636</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>user_ns[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">_exit_code</span><span style="color: rgb(175,0,0)">&#39;</span>] <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">system</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">var_expand</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">cmd</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">depth</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">1</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
-
-File <span class="ansi-green-fg">~/miniconda3/envs/torch-gpu/lib/python3.9/site-packages/IPython/utils/_process_posix.py:148</span>, in <span class="ansi-cyan-fg">ProcessHandler.system</span><span class="ansi-blue-fg">(self, cmd)</span>
-<span class="ansi-green-intense-fg ansi-bold">    146</span>     child <span style="color: rgb(98,98,98)">=</span> pexpect<span style="color: rgb(98,98,98)">.</span>spawnb(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>sh, args<span style="color: rgb(98,98,98)">=</span>[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">-c</span><span style="color: rgb(175,0,0)">&#39;</span>, cmd]) <span style="color: rgb(95,135,135)"># Pexpect-U</span>
-<span class="ansi-green-intense-fg ansi-bold">    147</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
-<span class="ansi-green-fg">--&gt; 148</span>     child <span style="color: rgb(98,98,98)">=</span> pexpect<span style="color: rgb(98,98,98)">.</span>spawn(<span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">sh</span>, args<span style="color: rgb(98,98,98)">=</span>[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">-c</span><span style="color: rgb(175,0,0)">&#39;</span>, cmd])  <span style="color: rgb(95,135,135)"># Vanilla Pexpect</span>
-<span class="ansi-green-intense-fg ansi-bold">    149</span> flush <span style="color: rgb(98,98,98)">=</span> sys<span style="color: rgb(98,98,98)">.</span>stdout<span style="color: rgb(98,98,98)">.</span>flush
-<span class="ansi-green-intense-fg ansi-bold">    150</span> <span class="ansi-bold" style="color: rgb(0,135,0)">while</span> <span class="ansi-bold" style="color: rgb(0,135,0)">True</span>:
-<span class="ansi-green-intense-fg ansi-bold">    151</span>     <span style="color: rgb(95,135,135)"># res is the index of the pattern that caused the match, so we</span>
-<span class="ansi-green-intense-fg ansi-bold">    152</span>     <span style="color: rgb(95,135,135)"># know whether we&#39;ve finished (if we matched EOF) or not</span>
-
-File <span class="ansi-green-fg">~/miniconda3/envs/torch-gpu/lib/python3.9/site-packages/IPython/utils/_process_posix.py:57</span>, in <span class="ansi-cyan-fg">ProcessHandler.sh</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">     55</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_sh <span style="color: rgb(98,98,98)">=</span> pexpect<span style="color: rgb(98,98,98)">.</span>which(shell_name)
-<span class="ansi-green-intense-fg ansi-bold">     56</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_sh <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:
-<span class="ansi-green-fg">---&gt; 57</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">OSError</span>(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&#34;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{}</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> shell not found</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(98,98,98)">.</span>format(shell_name))
-<span class="ansi-green-intense-fg ansi-bold">     59</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_sh
-
-<span class="ansi-red-fg">OSError</span>: &#34;-zsh&#34; shell not found</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -15873,300 +15784,23 @@ File <span class="ansi-green-fg">~/miniconda3/envs/torch-gpu/lib/python3.9/site-
 </div>
 </div>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[71]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="n">yri_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">get_mean_d_prime</span><span class="p">(</span><span class="n">snp_matrix</span><span class="p">,</span> <span class="n">yri_mask</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">x_values</span><span class="p">)])</span>
-<span class="n">ceu_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">get_mean_d_prime</span><span class="p">(</span><span class="n">snp_matrix</span><span class="p">,</span> <span class="n">ceu_mask</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">x_values</span><span class="p">)])</span>
-<span class="n">yri_and_ceu_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">get_mean_d_prime</span><span class="p">(</span><span class="n">snp_matrix</span><span class="p">,</span> <span class="n">yri_and_ceu_mask</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">x_values</span><span class="p">)])</span>
+<span class="n">yri_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">get_mean_d_prime</span><span class="p">(</span><span class="n">snp_matrix</span><span class="p">,</span> <span class="n">yri_mask</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_values</span><span class="p">])</span>
+<span class="n">ceu_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">get_mean_d_prime</span><span class="p">(</span><span class="n">snp_matrix</span><span class="p">,</span> <span class="n">ceu_mask</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_values</span><span class="p">])</span>
+<span class="n">yri_and_ceu_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">get_mean_d_prime</span><span class="p">(</span><span class="n">snp_matrix</span><span class="p">,</span> <span class="n">yri_and_ceu_mask</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_values</span><span class="p">])</span>
 </pre></div>
 
      </div>
 </div>
 </div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>
-
-
-
-  0%|                                    | 0/20 [00:00&lt;?, ?it/s]
-
-
-
-  5%|█▍                          | 1/20 [00:00&lt;00:04,  4.48it/s]
-
-
-
- 10%|██▊                         | 2/20 [00:00&lt;00:05,  3.42it/s]
-
-
-
- 15%|████▏                       | 3/20 [00:00&lt;00:04,  3.45it/s]
-
-
-
- 20%|█████▌                      | 4/20 [00:01&lt;00:04,  3.50it/s]
-
-
-
- 25%|███████                     | 5/20 [00:01&lt;00:04,  3.28it/s]
-
-
-
- 30%|████████▍                   | 6/20 [00:01&lt;00:04,  3.17it/s]
-
-
-
- 35%|█████████▊                  | 7/20 [00:02&lt;00:04,  3.24it/s]
-
-
-
- 40%|███████████▏                | 8/20 [00:02&lt;00:03,  3.37it/s]
-
-
-
- 45%|████████████▌               | 9/20 [00:02&lt;00:03,  3.34it/s]
-
-
-
- 50%|█████████████▌             | 10/20 [00:02&lt;00:03,  3.30it/s]
-
-
-
- 55%|██████████████▊            | 11/20 [00:03&lt;00:02,  3.35it/s]
-
-
-
- 60%|████████████████▏          | 12/20 [00:03&lt;00:02,  3.24it/s]
-
-
-
- 65%|█████████████████▌         | 13/20 [00:03&lt;00:02,  3.10it/s]
-
-
-
- 70%|██████████████████▉        | 14/20 [00:04&lt;00:01,  3.01it/s]
-
-
-
- 75%|████████████████████▎      | 15/20 [00:04&lt;00:01,  2.91it/s]
-
-
-
- 80%|█████████████████████▌     | 16/20 [00:05&lt;00:01,  2.83it/s]
-
-
-
- 85%|██████████████████████▉    | 17/20 [00:05&lt;00:01,  2.88it/s]
-
-
-
- 90%|████████████████████████▎  | 18/20 [00:05&lt;00:00,  2.78it/s]
-
-
-
- 95%|█████████████████████████▋ | 19/20 [00:06&lt;00:00,  2.74it/s]
-
-
-
-100%|███████████████████████████| 20/20 [00:06&lt;00:00,  3.08it/s]
-
-
-
-
-  0%|                                    | 0/20 [00:00&lt;?, ?it/s]
-
-
-
-  5%|█▍                          | 1/20 [00:00&lt;00:04,  4.32it/s]
-
-
-
- 10%|██▊                         | 2/20 [00:00&lt;00:05,  3.57it/s]
-
-
-
- 15%|████▏                       | 3/20 [00:00&lt;00:05,  3.39it/s]
-
-
-
- 20%|█████▌                      | 4/20 [00:01&lt;00:04,  3.46it/s]
-
-
-
- 25%|███████                     | 5/20 [00:01&lt;00:04,  3.32it/s]
-
-
-
- 30%|████████▍                   | 6/20 [00:01&lt;00:04,  3.32it/s]
-
-
-
- 35%|█████████▊                  | 7/20 [00:02&lt;00:03,  3.55it/s]
-
-
-
- 40%|███████████▏                | 8/20 [00:02&lt;00:03,  3.62it/s]
-
-
-
- 45%|████████████▌               | 9/20 [00:02&lt;00:03,  3.36it/s]
-
-
-
- 50%|█████████████▌             | 10/20 [00:02&lt;00:03,  3.30it/s]
-
-
-
- 55%|██████████████▊            | 11/20 [00:03&lt;00:02,  3.43it/s]
-
-
-
- 60%|████████████████▏          | 12/20 [00:03&lt;00:02,  3.22it/s]
-
-
-
- 65%|█████████████████▌         | 13/20 [00:03&lt;00:02,  3.07it/s]
-
-
-
- 70%|██████████████████▉        | 14/20 [00:04&lt;00:01,  3.09it/s]
-
-
-
- 75%|████████████████████▎      | 15/20 [00:04&lt;00:01,  3.10it/s]
-
-
-
- 80%|█████████████████████▌     | 16/20 [00:04&lt;00:01,  3.02it/s]
-
-
-
- 85%|██████████████████████▉    | 17/20 [00:05&lt;00:00,  3.28it/s]
-
-
-
- 90%|████████████████████████▎  | 18/20 [00:05&lt;00:00,  3.01it/s]
-
-
-
- 95%|█████████████████████████▋ | 19/20 [00:05&lt;00:00,  3.03it/s]
-
-
-
-100%|███████████████████████████| 20/20 [00:06&lt;00:00,  3.24it/s]
-
-
-
-
-  0%|                                    | 0/20 [00:00&lt;?, ?it/s]
-
-
-
-  5%|█▍                          | 1/20 [00:00&lt;00:04,  4.26it/s]
-
-
-
- 10%|██▊                         | 2/20 [00:00&lt;00:05,  3.35it/s]
-
-
-
- 15%|████▏                       | 3/20 [00:00&lt;00:05,  3.10it/s]
-
-
-
- 20%|█████▌                      | 4/20 [00:01&lt;00:04,  3.49it/s]
-
-
-
- 25%|███████                     | 5/20 [00:01&lt;00:04,  3.49it/s]
-
-
-
- 30%|████████▍                   | 6/20 [00:01&lt;00:04,  3.29it/s]
-
-
-
- 35%|█████████▊                  | 7/20 [00:02&lt;00:03,  3.38it/s]
-
-
-
- 40%|███████████▏                | 8/20 [00:02&lt;00:03,  3.62it/s]
-
-
-
- 45%|████████████▌               | 9/20 [00:02&lt;00:03,  3.27it/s]
-
-
-
- 50%|█████████████▌             | 10/20 [00:02&lt;00:03,  3.33it/s]
-
-
-
- 55%|██████████████▊            | 11/20 [00:03&lt;00:02,  3.39it/s]
-
-
-
- 60%|████████████████▏          | 12/20 [00:03&lt;00:02,  3.42it/s]
-
-
-
- 65%|█████████████████▌         | 13/20 [00:03&lt;00:02,  3.40it/s]
-
-
-
- 70%|██████████████████▉        | 14/20 [00:04&lt;00:01,  3.34it/s]
-
-
-
- 75%|████████████████████▎      | 15/20 [00:04&lt;00:01,  3.19it/s]
-
-
-
- 80%|█████████████████████▌     | 16/20 [00:04&lt;00:01,  3.28it/s]
-
-
-
- 85%|██████████████████████▉    | 17/20 [00:05&lt;00:00,  3.44it/s]
-
-
-
- 90%|████████████████████████▎  | 18/20 [00:05&lt;00:00,  3.30it/s]
-
-
-
- 95%|█████████████████████████▋ | 19/20 [00:05&lt;00:00,  3.24it/s]
-
-
-
-100%|███████████████████████████| 20/20 [00:05&lt;00:00,  3.36it/s]
-</pre>
-</div>
-</div>
-
-</div>
-
 </div>
 
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -16241,7 +15875,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Yes, these results are consistent with my expectations. I expected the CEU subpopulation to have higher LD between pairs on average compared to the YRI population on average which is what is observed. The YRI+CEU samples are usually somewhere in the middle of these two populations, which is also expected.</p>
+<p>Yes, these results are consistent with my expectations. I expected the CEU subpopulation to have higher LD between pairs on average compared to the YRI population on average which is what is observed.</p>
 
 </div>
 </div>
