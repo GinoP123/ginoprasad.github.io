@@ -17,7 +17,7 @@ import re
 
 # # Convert notebooks to html
 
-# In[2]:
+# In[16]:
 
 
 os.chdir('/Users/ginoprasad/ginoprasad.github.io')
@@ -28,28 +28,42 @@ temp_path = f'{os.getcwd()}/projects/temp.html'
 max_base_filename_length = 50
 
 
-# In[78]:
+# In[17]:
 
 
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[4]:
+# In[19]:
+
+
+def path_exists(path):
+    if path.endswith('pdf'):
+        return os.path.exists(path) and os.path.exists(path[:-3]+'yaml')
+    else:
+        return os.path.exists(path)
+
+
+# In[20]:
 
 
 for project_notebook_path in metadata['Projects'][:]:
-    if not os.path.exists(project_notebook_path):
+    if not path_exists(project_notebook_path):
         print(f"REMOVING {project_notebook_path}")
         metadata['Projects'].remove(project_notebook_path)
         with open(metadata_path, 'w') as outfile:
             yaml.dump(metadata, outfile, default_flow_style=False)
 
 
-# In[7]:
+# In[21]:
 
 
 def get_notebook_metadata(project_notebook_path):
+    if project_notebook_path.endswith('pdf'):
+        with open(f"{project_notebook_path[:-4]}.yaml") as infile:
+            return yaml.safe_load(infile)
+    
     notebook_metadata_str = sp.run(f"head -n 200 '{project_notebook_path}'", shell=True, capture_output=True).stdout.decode().split('\n')
     notebook_metadata_str = ''.join(notebook_metadata_str[notebook_metadata_str.index('   "source": [')+1:notebook_metadata_str.index('   ]')])
     
@@ -61,7 +75,7 @@ def get_notebook_metadata(project_notebook_path):
     return notebook_metadata
 
 
-# In[8]:
+# In[6]:
 
 
 project_names, project_paths, project_dates = [], [], []
@@ -74,7 +88,11 @@ for project_notebook_path in tqdm(metadata['Projects']):
     if not project_base_path:
         print(f"\n\n\n\n\tWarning: Project '{notebook_metadata['title']}' Name exceeds recommended length\n\n\n\n")
         project_base_path = notebook_metadata['title']
-    notebook_metadata['project_path'] = f'{os.getcwd()}/projects/{project_base_path}.html'
+    
+    project_base_path = f"{project_base_path}.html"
+    if project_notebook_path.endswith('pdf'):
+        project_base_path = project_base_path[:-5] + '.pdf'
+    notebook_metadata['project_path'] = f'{os.getcwd()}/projects/{project_base_path}'
     
     assert notebook_metadata['project_path'] not in project_paths
     project_names.append(notebook_metadata['title'])
@@ -85,8 +103,9 @@ for project_notebook_path in tqdm(metadata['Projects']):
         continue
     
     print(project_base_path)
-    print(f"Converting {project_notebook_path}")
-    sp.run(f"jupyter nbconvert --to html '{project_notebook_path}' --output '{temp_path}'", shell=True)
+    if project_notebook_path.endswith('ipynb'):
+        print(f"Converting {project_notebook_path}")
+        sp.run(f"jupyter nbconvert --to html '{project_notebook_path}' --output '{temp_path}'", shell=True)
     print(f"Project Name: {notebook_metadata['title']}")
 
     with open(temp_path) as infile:
@@ -110,14 +129,14 @@ project_names, project_paths, project_dates = map(sort_list, (project_names, pro
 None
 
 
-# In[91]:
+# In[7]:
 
 
 with open(index_html_path) as infile:
     index_html_lines = infile.readlines()
 
 
-# In[87]:
+# In[8]:
 
 
 project_template = "\t\t\t<li><div class=link><a href=\"projects/{}\">{}</a></div><div class='date'><img src='docs/assets/calendar_icon.png'><span class=date>{}</span></div></li>\n"
@@ -130,7 +149,7 @@ index_html_lines = index_html_lines[:project_list_index_start] + new_project_lis
 index_html_lines[project_list_index_start-2] = re.sub("(?<=\\().*?(?=\\))",  str(len(metadata['Projects'])), index_html_lines[project_list_index_start-2])
 
 
-# In[66]:
+# In[9]:
 
 
 with open(index_html_path, 'w') as outfile:
@@ -139,13 +158,19 @@ with open(index_html_path, 'w') as outfile:
 
 # # Copying CV and Updating Links
 
-# In[79]:
+# In[10]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[80]:
+# In[11]:
+
+
+metadata['CV']
+
+
+# In[11]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub', 'GoogleScholar', 'ORCID']}
@@ -153,21 +178,21 @@ tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 tag_dict['Logo'] = metadata['DomainLink']
 
 
-# In[81]:
+# In[12]:
 
 
 with open("header.html") as infile:
     header_html_string = infile.read()
 
 
-# In[82]:
+# In[13]:
 
 
 for tag_name, tag_value in tag_dict.items():
     header_html_string = re.sub(f"(?<=<a id='{tag_name}' href=').*?(?='>)", tag_value, header_html_string)
 
 
-# In[83]:
+# In[14]:
 
 
 with open("header.html", 'w') as outfile:
@@ -176,7 +201,7 @@ with open("header.html", 'w') as outfile:
 
 # # Writing Updated Index File
 
-# In[17]:
+# In[15]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
