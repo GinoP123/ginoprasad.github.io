@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 import os
@@ -17,7 +17,7 @@ import re
 
 # # Convert notebooks to html
 
-# In[2]:
+# In[3]:
 
 
 os.chdir('/Users/ginoprasad/ginoprasad.github.io')
@@ -28,14 +28,14 @@ temp_path = f'{os.getcwd()}/projects/temp.html'
 max_base_filename_length = 50
 
 
-# In[3]:
+# In[4]:
 
 
 with open(metadata_path) as infile:
     metadata = yaml.safe_load(infile)
 
 
-# In[4]:
+# In[5]:
 
 
 def path_exists(path):
@@ -45,7 +45,7 @@ def path_exists(path):
         return os.path.exists(path)
 
 
-# In[5]:
+# In[6]:
 
 
 for project_notebook_path in metadata['Projects'][:]:
@@ -56,7 +56,7 @@ for project_notebook_path in metadata['Projects'][:]:
             yaml.dump(metadata, outfile, default_flow_style=False)
 
 
-# In[6]:
+# In[7]:
 
 
 def get_notebook_metadata(project_notebook_path):
@@ -75,7 +75,7 @@ def get_notebook_metadata(project_notebook_path):
     return notebook_metadata
 
 
-# In[7]:
+# In[8]:
 
 
 project_names, project_paths, project_dates = [], [], []
@@ -133,14 +133,14 @@ project_names, project_paths, project_dates = map(sort_list, (project_names, pro
 None
 
 
-# In[8]:
+# In[9]:
 
 
 with open(index_html_path) as infile:
     index_html_lines = infile.readlines()
 
 
-# In[9]:
+# In[10]:
 
 
 project_template = "\t\t\t<li><div class=link><a href=\"projects/{}\">{}</a></div><div class='date'><img src='docs/assets/calendar_icon.png'><span class=date>{}</span></div></li>\n"
@@ -153,7 +153,7 @@ index_html_lines = index_html_lines[:project_list_index_start] + new_project_lis
 index_html_lines[project_list_index_start-2] = re.sub("(?<=\\().*?(?=\\))",  str(len(metadata['Projects'])), index_html_lines[project_list_index_start-2])
 
 
-# In[10]:
+# In[11]:
 
 
 with open(index_html_path, 'w') as outfile:
@@ -162,19 +162,19 @@ with open(index_html_path, 'w') as outfile:
 
 # # Copying CV and Updating Links
 
-# In[11]:
+# In[12]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[12]:
+# In[13]:
 
 
 metadata['CV']
 
 
-# In[13]:
+# In[14]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub', 'GoogleScholar', 'ORCID']}
@@ -182,21 +182,21 @@ tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 tag_dict['Logo'] = metadata['DomainLink']
 
 
-# In[14]:
+# In[15]:
 
 
 with open("header.html") as infile:
     header_html_string = infile.read()
 
 
-# In[15]:
+# In[16]:
 
 
 for tag_name, tag_value in tag_dict.items():
     header_html_string = re.sub(f"(?<=<a id='{tag_name}' href=').*?(?='>)", tag_value, header_html_string)
 
 
-# In[16]:
+# In[17]:
 
 
 with open("header.html", 'w') as outfile:
@@ -205,7 +205,7 @@ with open("header.html", 'w') as outfile:
 
 # # Writing Updated Index File
 
-# In[17]:
+# In[18]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -213,11 +213,23 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[18]:
+# In[ ]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
     sp.run(f"jupyter nbconvert --to script 'update_website.ipynb' --output 'update_website'", shell=True)
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
