@@ -220,9 +220,15 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[18]:
+# In[24]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
     sp.run(f"jupyter nbconvert --to script 'update_website.ipynb' --output 'update_website'", shell=True)
+
+
+# In[ ]:
+
+
+
 
