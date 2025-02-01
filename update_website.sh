@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
-source ~/.zprofile
-python3 /Users/ginoprasad/ginoprasad.github.io/update_website.py
+source ~/.profile
+python3 /home/giprasad/ginoprasad.github.io/update_website.py
