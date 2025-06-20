@@ -20,7 +20,7 @@ import re
 # In[2]:
 
 
-os.chdir('/Users/ginoprasad/ginoprasad.github.io')
+os.chdir('/home/giprasad/ginoprasad.github.io')
 index_html_path = 'index.html'
 header_html_path = 'header.html'
 metadata_path = 'metadata.yaml'
@@ -28,7 +28,7 @@ temp_path = f'{os.getcwd()}/projects/temp.html'
 max_base_filename_length = 50
 
 
-# In[3]:
+# In[15]:
 
 
 with open(metadata_path) as infile:
@@ -163,19 +163,25 @@ with open(index_html_path, 'w') as outfile:
 
 # # Copying CV and Updating Links
 
-# In[11]:
-
-
-assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
-
-
-# In[12]:
+# In[16]:
 
 
 metadata['CV']
 
 
-# In[13]:
+# In[17]:
+
+
+assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
+
+
+# In[18]:
+
+
+metadata['CV']
+
+
+# In[19]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub', 'GoogleScholar', 'ORCID']}
@@ -183,21 +189,21 @@ tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 tag_dict['Logo'] = metadata['DomainLink']
 
 
-# In[14]:
+# In[20]:
 
 
 with open("header.html") as infile:
     header_html_string = infile.read()
 
 
-# In[15]:
+# In[21]:
 
 
 for tag_name, tag_value in tag_dict.items():
     header_html_string = re.sub(f"(?<=<a id='{tag_name}' href=').*?(?='>)", tag_value, header_html_string)
 
 
-# In[16]:
+# In[22]:
 
 
 with open("header.html", 'w') as outfile:
@@ -206,7 +212,7 @@ with open("header.html", 'w') as outfile:
 
 # # Writing Updated Index File
 
-# In[17]:
+# In[23]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -214,23 +220,11 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[ ]:
+# In[24]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
     sp.run(f"jupyter nbconvert --to script 'update_website.ipynb' --output 'update_website'", shell=True)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
 
 
 # In[ ]:
