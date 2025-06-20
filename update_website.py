@@ -28,7 +28,7 @@ temp_path = f'{os.getcwd()}/projects/temp.html'
 max_base_filename_length = 50
 
 
-# In[15]:
+# In[3]:
 
 
 with open(metadata_path) as infile:
@@ -118,7 +118,8 @@ for project_notebook_path in tqdm(metadata['Projects']):
 
 
     title = ' '.join(map(lambda x: x[0].upper() + x[1:] if x else x, project_base_path.split('_')))
-    lines[5] = lines[5][:len('<title>')] + title + lines[5][lines[5].index('</title>'):]
+    index = np.argmax(['title' in x for x in lines])
+    lines[index] = lines[index][:len('<title>')] + title + lines[index][lines[index].index('</title>'):]
  
     with open(temp_path, 'w') as outfile:
         lines.insert(5, '<link rel="icon" href="../docs/assets/logo.png"><iframe src="../header.html" style="height: 12rem; width: 100%" frameborder="0" scrolling="no"></iframe>\n')
@@ -163,25 +164,25 @@ with open(index_html_path, 'w') as outfile:
 
 # # Copying CV and Updating Links
 
-# In[16]:
+# In[11]:
 
 
 metadata['CV']
 
 
-# In[17]:
+# In[12]:
 
 
 assert shutil.copy(metadata['CV'], f"projects/{os.path.basename(metadata['CV'])}")
 
 
-# In[18]:
+# In[13]:
 
 
 metadata['CV']
 
 
-# In[19]:
+# In[14]:
 
 
 tag_dict = {tag: metadata[tag] for tag in ['CV', 'LinkedIn', 'GitHub', 'GoogleScholar', 'ORCID']}
@@ -189,21 +190,21 @@ tag_dict['CV'] = f"projects/{os.path.basename(tag_dict['CV'])}"
 tag_dict['Logo'] = metadata['DomainLink']
 
 
-# In[20]:
+# In[15]:
 
 
 with open("header.html") as infile:
     header_html_string = infile.read()
 
 
-# In[21]:
+# In[16]:
 
 
 for tag_name, tag_value in tag_dict.items():
     header_html_string = re.sub(f"(?<=<a id='{tag_name}' href=').*?(?='>)", tag_value, header_html_string)
 
 
-# In[22]:
+# In[17]:
 
 
 with open("header.html", 'w') as outfile:
@@ -212,7 +213,7 @@ with open("header.html", 'w') as outfile:
 
 # # Writing Updated Index File
 
-# In[23]:
+# In[ ]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -220,11 +221,17 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[24]:
+# In[ ]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
     sp.run(f"jupyter nbconvert --to script 'update_website.ipynb' --output 'update_website'", shell=True)
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
