@@ -20,7 +20,7 @@ import re
 # In[2]:
 
 
-os.chdir('/home/giprasad/ginoprasad.github.io')
+os.chdir(os.path.expanduser('~/ginoprasad.github.io'))
 index_html_path = 'index.html'
 header_html_path = 'header.html'
 metadata_path = 'metadata.yaml'
