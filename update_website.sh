@@ -1,4 +1,6 @@
 #!/bin/bash
 
 source ~/.profile
-python3 /home/giprasad/ginoprasad.github.io/update_website.py
+
+script_dir=$(dirname "$0")
+python3 $script_dir/update_website.py
