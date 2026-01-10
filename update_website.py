@@ -108,7 +108,7 @@ for project_notebook_path in tqdm(metadata['Projects']):
 
     if extension == 'ipynb':
         print(f"Converting {project_notebook_path}")
-        sp.run(f"jupyter nbconvert --to html '{project_notebook_path}' --output '{temp_path}'", shell=True)
+        sp.run(f"jupyter nbconvert --template classic --to html '{project_notebook_path}' --output '{temp_path}'", shell=True)
     else:
         sp.run(f"cp '{project_notebook_path}' '{notebook_metadata['project_path']}'", shell=True)
         continue
@@ -129,8 +129,8 @@ for project_notebook_path in tqdm(metadata['Projects']):
     print('\n')
 
 datetimes = [datetime.datetime.strptime(project_date, '%m/%d/%Y') for project_date in project_dates]
-sort_list = lambda ls: [y[1] for y in sorted(enumerate(ls), key=lambda x: datetimes[x[0]], reverse=True)]
-project_names, project_paths, project_dates = map(sort_list, (project_names, project_paths, project_dates))
+# sort_list = lambda ls: [y[1] for y in sorted(enumerate(ls), key=lambda x: datetimes[x[0]], reverse=True)]
+# project_names, project_paths, project_dates = map(sort_list, (project_names, project_paths, project_dates))
 [os.remove(x) for x in glob.glob(f'{os.getcwd()}/projects/*') if x not in project_paths]
 None
 
@@ -213,7 +213,7 @@ with open("header.html", 'w') as outfile:
 
 # # Writing Updated Index File
 
-# In[ ]:
+# In[18]:
 
 
 sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'; git push origin main", shell=True)
@@ -221,7 +221,7 @@ sp.run(f"cd '{os.getcwd()}'; git add .; git commit -m 'Automated Website Update'
 
 # # Updating Python Script
 
-# In[ ]:
+# In[19]:
 
 
 if hasattr(__builtins__,'__IPYTHON__'):
